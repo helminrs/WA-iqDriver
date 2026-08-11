@@ -189,23 +189,30 @@
     </div>
   </div>
 
-  <!-- ==================== PAGE: NAVIGASI (PETA) ==================== -->
-  <div id="screen-navigasi-peta" class="screen-view">
-    <div class="nav-header-bar">
-      <!-- TOMBOL KEMBALI KE MENU UTAMA -->
-      <button type="button" class="btn-back-nav" onclick="tutupNavigasi(event)">← Kembali</button>
-      <h3 style="font-size: 16px;">Navigasi Rute Orderan</h3>
-    </div>
-    <div style="padding: 15px; text-align: center;">
-      <div style="width: 100%; height: 350px; background: #e0e0e0; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #666; font-weight: bold; border: 2px dashed #bbb;">
-        📍 Map / Navigasi GPS Aktif
-      </div>
-      <button type="button" class="btn-back-nav" onclick="tutupNavigasi(event)" style="background: #2e7d32; margin-top: 20px; width: 100%; padding: 12px;">
-        Selesai & Kembali ke Menu Orderan
-      </button>
-    </div>
+  <!-- PAGE: NAVIGASI (PETA GOOGLE MAPS) -->
+<div id="screen-navigasi-peta" class="screen-view">
+  <div class="nav-header-bar">
+    <button type="button" class="btn-back-nav" onclick="tutupNavigasi(event)">← Kembali</button>
+    <h3 style="font-size: 16px;">Navigasi Rute Orderan</h3>
   </div>
+  <div style="padding: 10px; text-align: center;">
+    
+    <!-- Iframe Peta Google Maps Asli -->
+    <iframe 
+      id="map-frame"
+      width="100%" 
+      height="450" 
+      style="border:0; border-radius:12px; box-shadow: 0 2px 8px rgba(0,0,0,0.15);" 
+      loading="lazy" 
+      allowfullscreen
+      src="about:blank">
+    </iframe>
 
+    <button type="button" class="btn-back-nav" onclick="tutupNavigasi(event)" style="background: #2e7d32; margin-top: 15px; width: 100%; padding: 12px; border-radius: 8px;">
+      Selesai & Kembali ke Menu Orderan
+    </button>
+  </div>
+</div>
   <!-- Script Logic Fixes -->
   <script>
     // Set default tanggal hari ini
@@ -213,12 +220,42 @@
 
     // Fix 1: Mencegah Refresh Tiba-tiba & Buka Navigasi Langsung tanpa WA Confirmation
     function bukaNavigasi(event) {
-      if(event) event.preventDefault(); // Menghentikan refresh otomatis browser
-      
-      // Sembunyikan aplikasi utama, tampilkan layar navigasi
-      document.getElementById('main-app').style.display = 'none';
-      document.getElementById('screen-navigasi-peta').classList.add('active');
+  if (event) event.preventDefault();
+
+  // 1. Ambil teks pesan WhatsApp dari textarea
+  const waText = document.getElementById('wa-text').value;
+
+  // 2. Cari lokasi Jemput dan Tujuan dari isi teks
+  let jemput = "";
+  let tujuan = "";
+
+  const lines = waText.split('\n');
+  lines.forEach(line => {
+    const lower = line.toLowerCase();
+    if (lower.includes('jemput:')) {
+      jemput = line.split(':')[1].trim();
+    } else if (lower.includes('tujuan:')) {
+      tujuan = line.split(':')[1].trim();
     }
+  });
+
+  // 3. Susun URL Google Maps berdasarkan lokasi yang ditemukan
+  let mapUrl = "";
+  if (jemput && tujuan) {
+    mapUrl = `https://maps.google.com/maps?saddr=${encodeURIComponent(jemput)}&daddr=${encodeURIComponent(tujuan)}&output=embed`;
+  } else if (jemput || tujuan) {
+    const lokasi = jemput || tujuan;
+    mapUrl = `https://maps.google.com/maps?q=${encodeURIComponent(lokasi)}&output=embed`;
+  } else {
+    // Jika teks kosong / tidak terdeteksi, buka koordinat umum atau lokasi default
+    mapUrl = `https://maps.google.com/maps?q=Pameungpeuk,Bandung&output=embed`;
+  }
+
+  // 4. Sematkan URL ke iframe peta dan tampilkan layarnya
+  document.getElementById('map-frame').src = mapUrl;
+  document.getElementById('main-app').style.display = 'none';
+  document.getElementById('screen-navigasi-peta').classList.add('active');
+}
 
     // Fix 2: Tombol Kembali dari Navigasi ke Menu Orderan
     function tutupNavigasi(event) {
