@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Halaman Navigasi</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background-color: #eef2f5;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+        .top-bar {
+            background-color: #008800;
+            color: white;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        .btn-back {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            padding: 8px 14px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .content {
+            flex: 1;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+        .map-placeholder {
+            width: 100%;
+            max-width: 400px;
+            height: 300px;
+            background-color: #e0e0e0;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #666;
+            border: 2px dashed #ccc;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Bar Atas Lengkap dengan Tombol Kembali -->
+    <div class="top-bar">
+        <a href="index.html" class="btn-back">← Kembali</a>
+        <h3 style="font-size: 18px;">Navigasi Rute</h3>
+    </div>
+
+    <div class="content">
+        <div class="map-placeholder">
+            <p>Area Peta / Navigasi GPS<br>(Disini lokasi peta Anda berada)</p>
+        </div>
+
+        <!-- Alternatif Tombol Kembali di Bawah -->
+        <a href="index.html" style="color: #008800; font-weight: bold; text-decoration: none;">
+            Kembali ke Menu Orderan iqbike
+        </a>
+    </div>
+
+</body>
+</html>
