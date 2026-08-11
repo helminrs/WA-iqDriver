@@ -8,6 +8,518 @@
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
     body { background-color: #f7f7f5; color: #1a1a1a; padding-bottom: 70px; }
 
+    /* Header & Summary Cards */
+    .app-header { display: flex; align-items: center; padding: 15px; gap: 12px; }
+    .avatar { width: 45px; height: 45px; background: #1a1a1a; color: #ffca28; font-weight: bold; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+    .user-info h2 { font-size: 16px; color: #1a1a1a; }
+    .user-info p { font-size: 12px; color: #666; }
+
+    .summary-container { display: flex; gap: 10px; padding: 0 15px 15px; }
+    .summary-card { flex: 1; background: #1c1c1c; color: white; padding: 12px; border-radius: 12px; }
+    .summary-card span { font-size: 10px; text-transform: uppercase; color: #aaa; font-weight: bold; }
+    .summary-card h3 { font-size: 18px; margin-top: 4px; }
+    .summary-card.masuk h3 { color: #ffca28; }
+    .summary-card.keluar h3 { color: #ef5350; }
+
+    /* Tab Switcher */
+    .type-switcher { display: flex; background: #e0e0dc; margin: 0 15px 15px; border-radius: 10px; padding: 3px; }
+    .type-btn { flex: 1; padding: 10px; border: none; background: transparent; font-weight: bold; border-radius: 8px; cursor: pointer; color: #666; }
+    .type-btn.active.pemasukan { background: #2e7d32; color: white; }
+    .type-btn.active.pengeluaran { background: #c62828; color: white; }
+
+    /* Grid Options */
+    .section-label { font-size: 11px; font-weight: bold; color: #777; margin: 15px 15px 8px; text-transform: uppercase; }
+    .grid-container { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; padding: 0 15px 15px; }
+    .grid-item { background: white; border: 1px solid #eee; border-radius: 12px; padding: 12px 5px; text-align: center; cursor: pointer; font-size: 12px; font-weight: 500; }
+    .grid-item.selected { border: 2px solid #2e7d32; background-color: #f0fdf4; }
+
+    /* Box Orderan */
+    .order-box { margin: 0 15px 15px; background: #e3f2fd; border: 1.5px dashed #0288d1; border-radius: 12px; padding: 12px; }
+    .order-box label { font-size: 11px; font-weight: bold; color: #0288d1; display: block; margin-bottom: 6px; }
+    .order-box textarea { width: 100%; height: 70px; border: 1px solid #b3e5fc; border-radius: 8px; padding: 8px; font-size: 12px; resize: none; outline: none; }
+    .btn-navigasi { width: 100%; margin-top: 8px; background: #0288d1; color: white; border: none; padding: 12px; border-radius: 8px; font-weight: bold; font-size: 14px; cursor: pointer; }
+
+    /* Form Input */
+    .form-group { padding: 0 15px 15px; }
+    .input-card { background: white; border-radius: 12px; padding: 10px 15px; border: 1px solid #eee; margin-bottom: 10px; }
+    .input-card label { font-size: 10px; color: #888; font-weight: bold; display: block; }
+    .input-card input, .input-card select { width: 100%; border: none; outline: none; font-size: 16px; font-weight: bold; margin-top: 2px; background: transparent; }
+
+    .btn-quick { display: flex; gap: 8px; margin-bottom: 15px; overflow-x: auto; }
+    .btn-quick button { background: #eee; border: none; padding: 6px 12px; border-radius: 15px; font-size: 12px; cursor: pointer; white-space: nowrap; }
+
+    .btn-submit { width: 100%; padding: 14px; border-radius: 10px; border: none; color: white; font-weight: bold; font-size: 15px; cursor: pointer; }
+    .btn-submit.pemasukan { background: #2e7d32; }
+    .btn-submit.pengeluaran { background: #c62828; }
+
+    /* Bottom Navigation */
+    .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: white; border-top: 1px solid #eee; display: flex; height: 60px; z-index: 100; }
+    .nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #888; text-decoration: none; font-size: 10px; cursor: pointer; }
+    .nav-item.active { color: #2e7d32; font-weight: bold; }
+
+    /* Component Cards */
+    .card-box { background: white; border-radius: 12px; padding: 15px; margin: 0 15px 15px; border: 1px solid #eee; }
+    .btn-dark { background: #1c1c1c; color: white; width: 100%; padding: 12px; border-radius: 8px; border: none; font-weight: bold; cursor: pointer; margin-top: 8px; }
+    .btn-green-action { background: #2e7d32; color: white; width: 100%; padding: 12px; border-radius: 8px; border: none; font-weight: bold; cursor: pointer; margin-bottom: 8px; }
+    .btn-gray-action { background: #757575; color: white; width: 100%; padding: 12px; border-radius: 8px; border: none; font-weight: bold; cursor: pointer; }
+
+    /* Screen Views */
+    .screen-view { display: none; }
+    .screen-view.active { display: block; }
+
+    /* Header Navigasi Khusus */
+    .nav-header-bar { background: #0288d1; color: white; padding: 12px 15px; display: flex; align-items: center; gap: 12px; }
+    .btn-back-nav { background: rgba(255,255,255,0.2); border: none; color: white; padding: 6px 12px; border-radius: 6px; font-weight: bold; cursor: pointer; }
+
+    .status-badge { display: inline-block; padding: 4px 10px; border-radius: 12px; font-size: 12px; font-weight: bold; margin-bottom: 8px; }
+    .badge-jemput { background: #fff3cd; color: #856404; }
+    .badge-antar { background: #d4edda; color: #155724; }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER UTAMA (HANYA SATU DI ATAS) -->
+  <div class="app-header">
+    <div class="avatar">iq</div>
+    <div class="user-info">
+      <h2>HELMI</h2>
+      <p id="header-subtitle">Catat Transaksi</p>
+    </div>
+  </div>
+
+  <div class="summary-container">
+    <div class="summary-card masuk">
+      <span>MASUK HARI INI</span>
+      <h3 id="txt-masuk">Rp 0</h3>
+    </div>
+    <div class="summary-card keluar">
+      <span>KELUAR HARI INI</span>
+      <h3 id="txt-keluar">Rp 0</h3>
+    </div>
+  </div>
+
+  <!-- ==================== MAIN APP VIEWS ==================== -->
+  <div id="main-app">
+    <!-- SCREEN 1: CATAT -->
+    <div id="screen-catat" class="screen-view active">
+      <div class="type-switcher">
+        <button type="button" class="type-btn active pemasukan" onclick="switchType('pemasukan')">Pemasukan</button>
+        <button type="button" class="type-btn" onclick="switchType('pengeluaran')">Pengeluaran</button>
+      </div>
+
+      <div class="section-label" id="label-sumber">SUMBER PEMASUKAN</div>
+      <div class="grid-container" id="grid-sumber">
+        <div class="grid-item" onclick="selectCategory(this)">🆔<br>InDrive</div>
+        <div class="grid-item" onclick="selectCategory(this)">🟢<br>Lain-Lain</div>
+        <div class="grid-item" onclick="selectCategory(this)">🛵<br>Offline</div>
+        <div class="grid-item" onclick="selectCategory(this)">🎁<br>Tips/Bonus</div>
+        <div class="grid-item selected" onclick="selectCategory(this)">💬<br>Ojeg WA</div>
+        <div class="grid-item" onclick="selectCategory(this)">💰<br>Lainnya</div>
+      </div>
+
+      <div class="order-box">
+        <label>📋 PASTE PESAN WHATSAPP ORDERAN:</label>
+        <textarea id="wa-text" placeholder="Tempel seluruh pesan WA dari penumpang di sini..."></textarea>
+        <button type="button" class="btn-navigasi" onclick="bukaNavigasi(event)">
+          ⚡ Proses Orderan & Buka Navigasi
+        </button>
+      </div>
+
+      <div class="form-group">
+        <div class="input-card">
+          <label>NOMINAL</label>
+          <input type="text" id="input-nominal" value="Rp 0">
+        </div>
+        <div class="btn-quick">
+          <button type="button" onclick="addNominal(10000)">+10 rb</button>
+          <button type="button" onclick="addNominal(20000)">+20 rb</button>
+          <button type="button" onclick="addNominal(50000)">+50 rb</button>
+          <button type="button" onclick="addNominal(100000)">+100 rb</button>
+        </div>
+
+        <div class="input-card">
+          <label>TANGGAL</label>
+          <input type="date" id="input-tanggal">
+        </div>
+
+        <div class="input-card">
+          <label>CATATAN (OPSIONAL)</label>
+          <input type="text" id="input-catatan" placeholder="mis. Order jauh ke bandara">
+        </div>
+
+        <button type="button" class="btn-submit pemasukan" id="btn-submit-main" onclick="simpanData(event)">
+          ✓ Simpan Pemasukan
+        </button>
+      </div>
+    </div>
+
+    <!-- SCREEN 2: RIWAYAT TRANSAKSI -->
+    <div id="screen-riwayat" class="screen-view">
+      <div class="card-box">
+        <label style="font-size: 11px; font-weight: bold; color: #666;">PERIODE CETAK LAPORAN:</label>
+        <select style="width: 100%; padding: 8px; margin-top: 5px; border-radius: 6px; border: 1px solid #ccc;">
+          <option>Semua Transaksi</option>
+        </select>
+        <button type="button" class="btn-dark" onclick="alert('Mencetak Laporan Mutasi PDF...')">🖨️ Cetak Mutasi PDF Selected</button>
+      </div>
+      <div class="section-label">RIWAYAT TRANSAKSI</div>
+      <div id="list-riwayat">
+        <!-- Render data riwayat -->
+      </div>
+    </div>
+
+    <!-- SCREEN 3: ANALISA KEUANGAN -->
+    <div id="screen-analisa" class="screen-view">
+      <div class="card-box">
+        <span style="font-size: 12px; color: #777;">Estimasi Keuntungan Bersih (Profit)</span>
+        <h2 id="analisa-profit" style="color: #2e7d32; margin-top: 5px;">Rp 0</h2>
+      </div>
+      <div class="card-box">
+        <span style="font-size: 12px; font-weight: bold; color: #444;">Sumber Pemasukan Terbanyak</span>
+        <p id="analisa-sumber" style="margin-top: 5px; color: #666; font-size: 13px;">Ojeg WA</p>
+      </div>
+      <div class="card-box">
+        <span style="font-size: 12px; font-weight: bold; color: #444;">Pengeluaran Terbesar</span>
+        <p id="analisa-pengeluaran" style="margin-top: 5px; color: #666; font-size: 13px;">-</p>
+      </div>
+    </div>
+
+    <!-- SCREEN 4: BEP -->
+    <div id="screen-bep" class="screen-view">
+      <div class="card-box" style="background: #1c1c1c; color: white;">
+        <h4 style="color: #ffca28; margin-bottom: 10px;">🧮 Kalkulator BEP & Target Harian</h4>
+        <p style="font-size: 13px; display: flex; justify-content: space-between; margin-bottom: 6px;">
+          <span>Biaya Tetap / Target Harian:</span> <strong>Rp 0</strong>
+        </p>
+        <p style="font-size: 13px; display: flex; justify-content: space-between; margin-bottom: 6px;">
+          <span>Pengeluaran Hari Ini:</span> <strong style="color: #ef5350;" id="bep-keluar">Rp 0</strong>
+        </p>
+        <p style="font-size: 13px; display: flex; justify-content: space-between; margin-bottom: 6px;">
+          <span>Target Minimal Omset Hari Ini:</span> <strong style="color: #ffca28;">Rp 0</strong>
+        </p>
+        <p style="font-size: 13px; display: flex; justify-content: space-between; margin-top: 10px; border-top: 1px solid #333; padding-top: 8px;">
+          <span>Status BEP Hari Ini:</span> <strong style="color: #ef5350;" id="bep-status">Belum Capai Target BEP</strong>
+        </p>
+      </div>
+
+      <div class="card-box">
+        <label style="font-size: 11px; font-weight: bold; color: #666;">Biaya Tetap Harian</label>
+        <input type="text" value="Rp 0" style="width: 100%; padding: 10px; font-size: 16px; font-weight: bold; border: 1px solid #ccc; border-radius: 8px; margin-top: 5px;">
+      </div>
+    </div>
+
+    <!-- SCREEN 5: PROFIL -->
+    <div id="screen-profil" class="screen-view">
+      <div class="card-box">
+        <h4 style="margin-bottom: 8px;">Identitas Driver & Kendaraan</h4>
+        <p style="font-size: 13px; color: #555;"><strong>Nama Driver:</strong> HELMI NURLIANSYAH</p>
+        <p style="font-size: 13px; color: #555;"><strong>Kendaraan:</strong> Honda Vario 125 KZR</p>
+        <p style="font-size: 13px; color: #555;"><strong>Plat Nomor:</strong> D 2074 JJ</p>
+      </div>
+
+      <div class="card-box">
+        <h4 style="margin-bottom: 10px;">Ekspor Data Mutasi</h4>
+        <button type="button" class="btn-green-action" onclick="exportCSV()">📊 Download File Excel (CSV)</button>
+        <button type="button" class="btn-dark" onclick="backupJSON()">📦 Cadangkan Backup (.json)</button>
+        <button type="button" class="btn-gray-action" onclick="hapusSemuaData()" style="margin-top: 8px;">🗑️ Hapus Semua Data</button>
+      </div>
+    </div>
+
+    <!-- BOTTOM NAVIGATION -->
+    <div class="bottom-nav">
+      <div class="nav-item active" onclick="switchScreen('catat', this)"><span>➕</span>Catat</div>
+      <div class="nav-item" onclick="switchScreen('riwayat', this)"><span>📋</span>Riwayat</div>
+      <div class="nav-item" onclick="switchScreen('analisa', this)"><span>📊</span>Analisa</div>
+      <div class="nav-item" onclick="switchScreen('bep', this)"><span>🧮</span>BEP</div>
+      <div class="nav-item" onclick="switchScreen('profil', this)"><span>👤</span>Profil</div>
+    </div>
+  </div>
+
+  <!-- ==================== PAGE: NAVIGASI BERTAHAP ==================== -->
+  <div id="screen-navigasi-peta" class="screen-view">
+    <div class="nav-header-bar">
+      <button type="button" class="btn-back-nav" onclick="tutupNavigasi(event)">← Kembali</button>
+      <h3 style="font-size: 16px;">Navigasi Rute Orderan</h3>
+    </div>
+
+    <div style="padding: 20px; text-align: center;">
+      <div style="background: white; border-radius: 12px; padding: 15px; border: 1px solid #ddd; margin-bottom: 15px; text-align: left;">
+        <span id="badge-status" class="status-badge badge-jemput">📍 TAHAP 1: PENJEMPUTAN</span>
+        <p id="info-rute" style="font-size: 13px; color: #555; white-space: pre-line; line-height: 1.4;"></p>
+      </div>
+
+      <button type="button" id="btn-action-gps" style="width: 100%; padding: 14px; background: #0288d1; color: white; border: none; border-radius: 10px; font-weight: bold; font-size: 15px; cursor: pointer; margin-bottom: 10px;">
+        📍 Buka GPS titik JEMPUT
+      </button>
+
+      <button type="button" id="btn-step-next" style="width: 100%; padding: 12px; background: #ff9800; color: white; border: none; border-radius: 10px; font-weight: bold; font-size: 14px; cursor: pointer; margin-bottom: 15px;">
+        🙋‍♂️ Saya Sudah Sampai / Penumpang Naik
+      </button>
+
+      <button type="button" onclick="tutupNavigasi(event)" style="width: 100%; padding: 14px; background: #2e7d32; color: white; border: none; border-radius: 10px; font-weight: bold; font-size: 15px; cursor: pointer;">
+        ✓ Selesai & Kembali ke Beranda
+      </button>
+    </div>
+  </div>
+
+  <!-- ==================== JAVASCRIPT ==================== -->
+  <script>
+    document.getElementById('input-tanggal').valueAsDate = new Date();
+
+    let transaksiData = JSON.parse(localStorage.getItem('iqbike_transaksi')) || [
+      { id: 1, kategori: 'Ojeg WA', tipe: 'masuk', nominal: 17000, detail: 'Pameungpeuk -> Kopo Permai', tanggal: '2026-08-11' }
+    ];
+
+    let urlJemput = "";
+    let urlAntar = "";
+    let extractedNominal = 0;
+    let stepNavigasi = 1;
+
+    function saveToStorage() {
+      localStorage.setItem('iqbike_transaksi', JSON.stringify(transaksiData));
+      renderAllData();
+    }
+
+    function bukaNavigasi(event) {
+      if(event) event.preventDefault();
+
+      const textWA = document.getElementById('wa-text').value.trim();
+      if(!textWA) {
+        alert('Silakan tempel pesan WA orderan terlebih dahulu!');
+        return;
+      }
+
+      const urlRegex = /(https?:\/\/[^\s]+)/g;
+      const foundUrls = textWA.match(urlRegex) || [];
+
+      urlJemput = foundUrls[0] || "https://maps.google.com/?q=-7.029822,107.587289";
+      urlAntar = foundUrls[1] || "https://maps.google.com/?q=-6.966447,107.585299";
+
+      const tariffMatch = textWA.match(/Rp\s*([\d\.]+)/i);
+      if(tariffMatch) {
+        extractedNominal = parseInt(tariffMatch[1].replace(/\./g, '')) || 17000;
+      } else {
+        extractedNominal = 17000;
+      }
+
+      document.getElementById('info-rute').innerText = textWA;
+
+      stepNavigasi = 1;
+      updateUIStateNavigasi();
+
+      document.getElementById('main-app').style.display = 'none';
+      document.getElementById('screen-navigasi-peta').classList.add('active');
+    }
+
+    function updateUIStateNavigasi() {
+      const btnGps = document.getElementById('btn-action-gps');
+      const btnNext = document.getElementById('btn-step-next');
+      const badge = document.getElementById('badge-status');
+
+      if(stepNavigasi === 1) {
+        badge.className = "status-badge badge-jemput";
+        badge.innerText = "📍 TAHAP 1: PENJEMPUTAN";
+        
+        btnGps.style.background = "#0288d1";
+        btnGps.innerText = "📍 Buka GPS titik JEMPUT";
+        btnGps.onclick = function() {
+          window.open(urlJemput, '_blank');
+        };
+
+        btnNext.style.display = "block";
+        btnNext.innerText = "🙋‍♂️ Saya Sudah Sampai / Penumpang Naik";
+        btnNext.onclick = function() {
+          stepNavigasi = 2;
+          updateUIStateNavigasi();
+        };
+      } else {
+        badge.className = "status-badge badge-antar";
+        badge.innerText = "🏁 TAHAP 2: PENGANTARAN";
+
+        btnGps.style.background = "#2e7d32";
+        btnGps.innerText = "🏁 Buka GPS titik ANTAR (TUJUAN)";
+        btnGps.onclick = function() {
+          window.open(urlAntar, '_blank');
+        };
+
+        btnNext.style.display = "none";
+      }
+    }
+
+    function tutupNavigasi(event) {
+      if(event) event.preventDefault();
+
+      const textWA = document.getElementById('wa-text').value.trim();
+      if(textWA) {
+        document.getElementById('input-catatan').value = textWA.substring(0, 40) + "...";
+      }
+
+      if(extractedNominal > 0) {
+        document.getElementById('input-nominal').value = "Rp " + extractedNominal.toLocaleString('id-ID');
+      }
+
+      document.getElementById('screen-navigasi-peta').classList.remove('active');
+      document.getElementById('main-app').style.display = 'block';
+    }
+
+    function simpanData(e) {
+      if(e) e.preventDefault();
+
+      let valStr = document.getElementById('input-nominal').value.replace(/[^0-9]/g, '');
+      let nominal = parseInt(valStr) || 0;
+
+      if(nominal <= 0) {
+        alert('Masukkan nominal transaksi!');
+        return;
+      }
+
+      let activeTypeBtn = document.querySelector('.type-btn.active');
+      let tipe = activeTypeBtn.classList.contains('pemasukan') ? 'masuk' : 'keluar';
+      let selectedCategory = document.querySelector('.grid-item.selected')?.innerText.replace(/\n/g, ' ') || 'Ojeg WA';
+      let catatan = document.getElementById('input-catatan').value || 'Order Offline/WA';
+      let tgl = document.getElementById('input-tanggal').value;
+
+      transaksiData.unshift({
+        id: Date.now(),
+        kategori: selectedCategory,
+        tipe: tipe,
+        nominal: nominal,
+        detail: catatan,
+        tanggal: tgl
+      });
+
+      saveToStorage();
+      alert('Transaksi berhasil disimpan!');
+      
+      document.getElementById('input-nominal').value = 'Rp 0';
+      document.getElementById('input-catatan').value = '';
+      document.getElementById('wa-text').value = '';
+    }
+
+    function renderAllData() {
+      let totalMasuk = 0;
+      let totalKeluar = 0;
+      let listHtml = '';
+
+      transaksiData.forEach(t => {
+        if(t.tipe === 'masuk') totalMasuk += t.nominal;
+        else totalKeluar += t.nominal;
+
+        listHtml += `
+          <div class="card-box" style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;">
+            <div>
+              <strong>${t.kategori}</strong>
+              <p style="font-size: 11px; color: #777;">${t.detail}</p>
+              <span style="font-size: 10px; color: #aaa;">${t.tanggal}</span>
+            </div>
+            <strong style="color: ${t.tipe === 'masuk' ? '#2e7d32' : '#c62828'};">
+              ${t.tipe === 'masuk' ? '+' : '-'}Rp ${t.nominal.toLocaleString('id-ID')}
+            </strong>
+          </div>
+        `;
+      });
+
+      document.getElementById('txt-masuk').innerText = 'Rp ' + totalMasuk.toLocaleString('id-ID');
+      document.getElementById('txt-keluar').innerText = 'Rp ' + totalKeluar.toLocaleString('id-ID');
+      document.getElementById('list-riwayat').innerHTML = listHtml || '<p style="text-align:center; padding:20px; color:#888;">Belum ada transaksi</p>';
+
+      let profit = totalMasuk - totalKeluar;
+      document.getElementById('analisa-profit').innerText = 'Rp ' + profit.toLocaleString('id-ID');
+
+      document.getElementById('bep-keluar').innerText = 'Rp ' + totalKeluar.toLocaleString('id-ID');
+      document.getElementById('bep-status').innerText = profit >= 0 ? 'Target BEP Tercapai' : 'Belum Capai Target BEP';
+      document.getElementById('bep-status').style.color = profit >= 0 ? '#2e7d32' : '#ef5350';
+    }
+
+    function switchType(type) {
+      const btns = document.querySelectorAll('.type-btn');
+      const label = document.getElementById('label-sumber');
+      const submitBtn = document.getElementById('btn-submit-main');
+      
+      btns.forEach(b => b.classList.remove('active', 'pemasukan', 'pengeluaran'));
+
+      if(type === 'pemasukan') {
+        btns[0].classList.add('active', 'pemasukan');
+        label.innerText = 'SUMBER PEMASUKAN';
+        submitBtn.className = 'btn-submit pemasukan';
+        submitBtn.innerHTML = '✓ Simpan Pemasukan';
+      } else {
+        btns[1].classList.add('active', 'pengeluaran');
+        label.innerText = 'KATEGORI PENGELUARAN';
+        submitBtn.className = 'btn-submit pengeluaran';
+        submitBtn.innerHTML = '✓ Simpan Pengeluaran';
+      }
+    }
+
+    function switchScreen(screenName, el) {
+      document.querySelectorAll('.screen-view').forEach(s => s.classList.remove('active'));
+      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+      
+      document.getElementById('screen-' + screenName).classList.add('active');
+      el.classList.add('active');
+
+      const subtitles = {
+        'catat': 'Catat Transaksi',
+        'riwayat': 'Riwayat Transaksi',
+        'analisa': 'Analisa Keuangan',
+        'bep': 'Kalkulator BEP',
+        'profil': 'Profil & Identitas'
+      };
+      document.getElementById('header-subtitle').innerText = subtitles[screenName] || '';
+    }
+
+    function selectCategory(el) {
+      document.querySelectorAll('.grid-item').forEach(i => i.classList.remove('selected'));
+      el.classList.add('selected');
+    }
+
+    function addNominal(val) {
+      let input = document.getElementById('input-nominal');
+      let current = parseInt(input.value.replace(/[^0-9]/g, '')) || 0;
+      let total = current + val;
+      input.value = 'Rp ' + total.toLocaleString('id-ID');
+    }
+
+    function exportCSV() {
+      let csv = 'ID,Kategori,Tipe,Nominal,Detail,Tanggal\n';
+      transaksiData.forEach(r => {
+        csv += `${r.id},${r.kategori},${r.tipe},${r.nominal},"${r.detail}",${r.tanggal}\n`;
+      });
+      let blob = new Blob([csv], { type: 'text/csv' });
+      let a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'Mutasi_iqDriver.csv';
+      a.click();
+    }
+
+    function backupJSON() {
+      let blob = new Blob([JSON.stringify(transaksiData, null, 2)], { type: 'application/json' });
+      let a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'Backup_iqDriver.json';
+      a.click();
+    }
+
+    function hapusSemuaData() {
+      if(confirm('Apakah Anda yakin ingin menghapus seluruh data transaksi?')) {
+        transaksiData = [];
+        saveToStorage();
+      }
+    }
+
+    renderAllData();
+  </script>
+</body>
+</html><!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WA-iqDriver - HELMI</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body { background-color: #f7f7f5; color: #1a1a1a; padding-bottom: 70px; }
+
     /* Header & Summary Cards ORI */
     .app-header { display: flex; align-items: center; padding: 15px; gap: 12px; }
     .avatar { width: 45px; height: 45px; background: #1a1a1a; color: #ffca28; font-weight: bold; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; }
