@@ -3,65 +3,80 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>iqbike - Mutasi & Catatan Driver</title>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <title>iqbike - Menu Orderan</title>
     <style>
-        :root {
-            --bg-color: #FAF8F5;
-            --card-bg: #FFFFFF;
-            --dark-card: #1C1B18;
-            --primary-red: #C83B3B;
-            --primary-green: #2B8A3E;
-            --text-main: #2C2A29;
-            --text-sub: #7A7773;
-            --border-color: #EFECE6;
-            --accent-yellow: #E5A93C;
-        }
-
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            -webkit-tap-highlight-color: transparent;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-
         body {
-            background-color: var(--bg-color);
-            color: var(--text-main);
+            background-color: #f4f6f9;
+            padding: 20px;
             display: flex;
-            justify-content: center;
-            min-height: 100vh;
-            padding-bottom: 90px;
+            flex-direction: column;
+            align-items: center;
         }
-
-        .app-container {
+        .header {
             width: 100%;
-            max-width: 480px;
-            padding: 16px;
+            max-width: 400px;
+            background-color: #008800;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
-
-        /* Header Logo */
-        .app-header {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 16px;
+        .card {
+            width: 100%;
+            max-width: 400px;
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            margin-bottom: 15px;
         }
-
-        .logo-box {
-            width: 44px;
-            height: 44px;
-            background: var(--dark-card);
-            color: var(--accent-yellow);
-            font-weight: 800;
-            font-size: 18px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        .btn-navigasi {
+            display: block;
+            width: 100%;
+            padding: 14px;
+            background-color: #008800;
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.15);
         }
+        .btn-navigasi:active {
+            background-color: #006600;
+        }
+    </style>
+</head>
+<body>
 
+    <div class="header">
+        <h2>iqbike</h2>
+        <p>Menu Orderan</p>
+    </div>
+
+    <div class="card">
+        <h3>Detail Orderan</h3>
+        <p style="margin-top: 10px; color: #555;">Klik tombol di bawah ini untuk melihat peta / rute navigasi tanpa perlu konfirmasi WhatsApp.</p>
+    </div>
+
+    <!-- Tombol ini langsung mengarah ke file navigasi.html -->
+    <div style="width: 100%; max-width: 400px;">
+        <a href="navigasi.html" class="btn-navigasi">Buka Navigasi Rute</a>
+    </div>
+
+</body>
+</html>
         .header-title h1 {
             font-size: 18px;
             font-weight: 800;
