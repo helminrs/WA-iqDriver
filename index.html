@@ -189,13 +189,30 @@
     </div>
   </div>
 
-  <!-- PAGE: NAVIGASI (PETA GOOGLE MAPS) -->
+  <!-- PAGE: NAVIGASI (PETA) -->
 <div id="screen-navigasi-peta" class="screen-view">
   <div class="nav-header-bar">
     <button type="button" class="btn-back-nav" onclick="tutupNavigasi(event)">← Kembali</button>
-    <h3 style="font-size: 16px;">Navigasi Rute Orderan</h3>
+    <h3 style="font-size: 16px; color: white;">Navigasi Rute Orderan</h3>
   </div>
-  <div style="padding: 10px; text-align: center;">
+
+  <div style="padding: 10px;">
+    <!-- Tombol Khusus Buka GPS Google Maps Asli HP -->
+    <button type="button" id="btn-open-google-maps" style="width: 100%; padding: 12px; background: #4285F4; color: white; border: none; border-radius: 8px; font-weight: bold; margin-bottom: 10px; cursor: pointer;">
+      🗺️ Buka Navigasi Suara di Google Maps HP
+    </button>
+
+    <!-- Map Iframe Embed -->
+    <div style="width: 100%; height: 380px; border-radius: 12px; overflow: hidden; border: 1px solid #ccc;">
+      <iframe id="map-iframe" width="100%" height="100%" frameborder="0" style="border:0;" src="about:blank" allowfullscreen></iframe>
+    </div>
+
+    <!-- Tombol Menyelesaikan Orderan -->
+    <button type="button" onclick="tutupNavigasi(event)" style="background: #2e7d32; color: white; border: none; margin-top: 15px; width: 100%; padding: 14px; border-radius: 8px; font-weight: bold; font-size: 15px; cursor: pointer;">
+      ✓ Selesai & Kembali ke Menu Orderan
+    </button>
+  </div>
+</div>
     
     <!-- Iframe Peta Google Maps Asli -->
     <iframe 
@@ -215,47 +232,138 @@
 </div>
   <!-- Script Logic Fixes -->
   <script>
-    // Set default tanggal hari ini
-    document.getElementById('input-tanggal').valueAsDate = new Date();
+  // Set default tanggal hari ini
+  document.getElementById('input-tanggal').valueAsDate = new Date();
 
-    // Fix 1: Mencegah Refresh Tiba-tiba & Buka Navigasi Langsung tanpa WA Confirmation
-    function bukaNavigasi(event) {
-  if (event) event.preventDefault();
+  // Variabel penampung data orderan aktif
+  let currentOrderData = {
+    asal: '',
+    tujuan: '',
+    nominal: 0,
+    rawText: ''
+  };
 
-  // 1. Ambil teks pesan WhatsApp dari textarea
-  const waText = document.getElementById('wa-text').value;
+  // 1. FUNGSI PROSES ORDERAN & BUKA NAVIGASI
+  function bukaNavigasi(event) {
+    if(event) event.preventDefault();
 
-  // 2. Cari lokasi Jemput dan Tujuan dari isi teks
-  let jemput = "";
-  let tujuan = "";
-
-  const lines = waText.split('\n');
-  lines.forEach(line => {
-    const lower = line.toLowerCase();
-    if (lower.includes('jemput:')) {
-      jemput = line.split(':')[1].trim();
-    } else if (lower.includes('tujuan:')) {
-      tujuan = line.split(':')[1].trim();
+    const textWA = document.getElementById('wa-text').value.trim();
+    if(!textWA) {
+      alert('Silakan tempel pesan WA orderan terlebih dahulu!');
+      return;
     }
-  });
 
-  // 3. Susun URL Google Maps berdasarkan lokasi yang ditemukan
-  let mapUrl = "";
-  if (jemput && tujuan) {
-    mapUrl = `https://maps.google.com/maps?saddr=${encodeURIComponent(jemput)}&daddr=${encodeURIComponent(tujuan)}&output=embed`;
-  } else if (jemput || tujuan) {
-    const lokasi = jemput || tujuan;
-    mapUrl = `https://maps.google.com/maps?q=${encodeURIComponent(lokasi)}&output=embed`;
-  } else {
-    // Jika teks kosong / tidak terdeteksi, buka koordinat umum atau lokasi default
-    mapUrl = `https://maps.google.com/maps?q=Pameungpeuk,Bandung&output=embed`;
+    currentOrderData.rawText = textWA;
+
+    // Cari Link Google Maps / Alamat dari Teks WA
+    const urlRegex = /(https?:\/\/[^\s]+)/g;
+    const foundUrls = textWA.match(urlRegex) || [];
+
+    // Cari Nominal / Ongkir (misal: 17000 atau Rp 17.000)
+    const nominalRegex = /(?:rp|ongkir|tarif)?\s*[\:\=]?\s*(\d{1,3}(?:\.\d{3})+|\d+)/gi;
+    const foundNominal = textWA.match(nominalRegex);
+
+    let destinationQuery = "";
+
+    if (foundUrls.length > 0) {
+      // Jika ada link Google Maps di pesan WA, gunakan link tersebut
+      destinationQuery = foundUrls[0];
+    } else {
+      // Jika berupa teks alamat biasa, bersihkan teksnya
+      destinationQuery = encodeURIComponent(textWA.substring(0, 100));
+    }
+
+    // Update Tampilan Frame Navigasi
+    const mapFrame = document.getElementById('map-iframe');
+    if(mapFrame) {
+      // Format Google Maps Embed resmi berdasarkan pencarian/link
+      mapFrame.src = `https://maps.google.com/maps?q=${destinationQuery}&output=embed`;
+    }
+
+    // Set Tombol Buka Aplikasi Google Maps HP (Navigasi GPS Akurat)
+    const btnAppMaps = document.getElementById('btn-open-google-maps');
+    if(btnAppMaps) {
+      if(foundUrls.length > 0) {
+        btnAppMaps.onclick = () => window.open(foundUrls[0], '_blank');
+      } else {
+        btnAppMaps.onclick = () => window.open(`https://www.google.com/maps/search/?api=1&query=${destinationQuery}`, '_blank');
+      }
+    }
+
+    // Tampilkan Layar Navigasi
+    document.getElementById('main-app').style.display = 'none';
+    document.getElementById('screen-navigasi-peta').classList.add('active');
   }
 
-  // 4. Sematkan URL ke iframe peta dan tampilkan layarnya
-  document.getElementById('map-frame').src = mapUrl;
-  document.getElementById('main-app').style.display = 'none';
-  document.getElementById('screen-navigasi-peta').classList.add('active');
-}
+  // 2. FUNGSI MENYELESAIKAN ORDERAN & KEMBALI
+  function tutupNavigasi(event) {
+    if(event) event.preventDefault();
+
+    // Isi Otomatis Catatan & Nominal jika ditemukan di teks WA
+    if(currentOrderData.rawText) {
+      const inputCatatan = document.querySelector('input[placeholder*="Order jauh"]');
+      if(inputCatatan) {
+        inputCatatan.value = "Orderan WA: " + currentOrderData.rawText.substring(0, 50) + "...";
+      }
+    }
+
+    // Sembunyikan layar navigasi, kembali ke menu utama
+    document.getElementById('screen-navigasi-peta').classList.remove('active');
+    document.getElementById('main-app').style.display = 'block';
+
+    // Fokuskan pengguna ke tombol Simpan Pemasukan
+    const btnSubmit = document.getElementById('btn-submit-main');
+    if(btnSubmit) {
+      btnSubmit.scrollIntoView({ behavior: 'smooth' });
+    }
+  }
+
+  // Fungsi Pembantu Lainnya
+  function switchType(type) {
+    const btns = document.querySelectorAll('.type-btn');
+    const label = document.getElementById('label-sumber');
+    const submitBtn = document.getElementById('btn-submit-main');
+    
+    btns.forEach(b => b.classList.remove('active', 'pemasukan', 'pengeluaran'));
+
+    if(type === 'pemasukan') {
+      btns[0].classList.add('active', 'pemasukan');
+      label.innerText = 'SUMBER PEMASUKAN';
+      submitBtn.className = 'btn-submit pemasukan';
+      submitBtn.innerHTML = '✓ Simpan Pemasukan';
+    } else {
+      btns[1].classList.add('active', 'pengeluaran');
+      label.innerText = 'KATEGORI PENGELUARAN';
+      submitBtn.className = 'btn-submit pengeluaran';
+      submitBtn.innerHTML = '✓ Simpan Pengeluaran';
+    }
+  }
+
+  function switchScreen(screenName, el) {
+    document.querySelectorAll('.screen-view').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    
+    document.getElementById('screen-' + screenName).classList.add('active');
+    el.classList.add('active');
+  }
+
+  function selectCategory(el) {
+    document.querySelectorAll('.grid-item').forEach(i => i.classList.remove('selected'));
+    el.classList.add('selected');
+  }
+
+  function addNominal(val) {
+    let input = document.getElementById('input-nominal');
+    let current = parseInt(input.value.replace(/[^0-9]/g, '')) || 0;
+    let total = current + val;
+    input.value = 'Rp ' + total.toLocaleString('id-ID');
+  }
+
+  function simpanData(e) {
+    if(e) e.preventDefault();
+    alert('Orderan berhasil diselesaikan & dimasukkan ke Pemasukan!');
+  }
+</script>
 
     // Fix 2: Tombol Kembali dari Navigasi ke Menu Orderan
     function tutupNavigasi(event) {
