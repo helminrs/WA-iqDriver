@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>iqbike - Menu Orderan</title>
+    <title>iqbike - Driver</title>
     <style>
         * {
             box-sizing: border-box;
@@ -11,90 +11,478 @@
             padding: 0;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
         }
+
+        :root {
+            --primary-green: #008800;
+            --primary-red: #D32F2F;
+            --dark-card: #1C1C1E;
+            --card-bg: #FFFFFF;
+            --border-color: #E0E0E0;
+            --text-main: #212121;
+            --text-sub: #757575;
+            --accent-yellow: #FFC107;
+        }
+
         body {
-            background-color: #f4f6f9;
-            padding: 20px;
+            background-color: #F4F6F9;
+            color: var(--text-main);
+            padding: 16px;
+            padding-bottom: 80px;
             display: flex;
             flex-direction: column;
             align-items: center;
         }
-        .header {
+
+        .container {
             width: 100%;
-            max-width: 400px;
-            background-color: #008800;
-            color: white;
-            padding: 15px;
-            text-align: center;
-            border-radius: 12px;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            max-width: 480px;
         }
+
+        .header {
+            background-color: var(--primary-green);
+            color: white;
+            padding: 16px;
+            border-radius: 14px;
+            text-align: center;
+            margin-bottom: 16px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
         .header-title h1 {
             font-size: 18px;
             font-weight: 800;
             line-height: 1.1;
         }
+
         .header-title p {
             font-size: 12px;
-            opacity: 0.9;
+            color: rgba(255, 255, 255, 0.9);
             margin-top: 4px;
         }
-        .card {
-            width: 100%;
-            max-width: 400px;
-            background: white;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+
+        /* Summary Cards */
+        .summary-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .summary-card {
+            background: var(--dark-card);
+            border-radius: 16px;
+            padding: 14px;
+            color: #FFF;
+        }
+
+        .summary-card label {
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            color: #9A9893;
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        .summary-card .amount {
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--accent-yellow);
+        }
+
+        .summary-card.expense .amount {
+            color: #FF6B6B;
+        }
+
+        /* Type Switcher */
+        .type-switcher {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            background: #EFECE6;
+            padding: 4px;
+            border-radius: 14px;
             margin-bottom: 20px;
         }
-        .card h3 {
-            font-size: 16px;
-            margin-bottom: 8px;
-            color: #333;
-        }
-        .card p {
-            font-size: 13px;
-            color: #666;
-            line-height: 1.4;
-        }
-        .btn-navigasi {
-            display: block;
-            width: 100%;
-            max-width: 400px;
-            padding: 14px;
-            background-color: #008800;
-            color: white;
-            text-align: center;
-            text-decoration: none;
-            font-weight: bold;
-            border-radius: 8px;
+
+        .type-btn {
             border: none;
+            background: transparent;
+            padding: 12px;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 14px;
+            color: var(--text-sub);
             cursor: pointer;
-            font-size: 16px;
-            box-shadow: 0 3px 6px rgba(0,0,0,0.15);
+            transition: all 0.2s ease;
         }
-        .btn-navigasi:active {
-            background-color: #006600;
+
+        .type-btn.active.income {
+            background: var(--primary-green);
+            color: white;
+        }
+
+        .type-btn.active.expense {
+            background: var(--primary-red);
+            color: white;
+        }
+
+        /* Category Grid */
+        .section-label {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--text-sub);
+            letter-spacing: 0.5px;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .cat-card {
+            background: var(--card-bg);
+            border: 1.5px solid var(--border-color);
+            border-radius: 14px;
+            padding: 12px 6px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .cat-card span {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-main);
+            text-align: center;
+        }
+
+        .cat-card.selected.income-selected {
+            border-color: var(--primary-green);
+            background: #F0FDF4;
+        }
+
+        /* KOTAK PASTE KHUSUS OJEG WA */
+        #wa-driver-box {
+            background: #E0F2FE;
+            border: 1.5px dashed #0284C7;
+            border-radius: 14px;
+            padding: 12px;
+            margin-bottom: 16px;
+            display: none;
+        }
+
+        #wa-driver-box label {
+            font-size: 11px;
+            font-weight: 800;
+            color: #0369A1;
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        #wa-driver-box textarea {
+            width: 100%;
+            height: 90px;
+            padding: 10px;
+            border: 1px solid #BAE6FD;
+            border-radius: 8px;
+            font-size: 12px;
+            resize: none;
+            outline: none;
+            margin-bottom: 8px;
+        }
+
+        .btn-wa-process {
+            width: 100%;
+            background: #0284C7;
+            color: white;
+            border: none;
+            padding: 10px;
+            font-size: 13px;
+            font-weight: 700;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        /* POPUP NAVIGASI DRIVER */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.6);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 999;
+            padding: 16px;
+        }
+
+        .modal-card {
+            background: var(--dark-card);
+            width: 100%;
+            max-width: 420px;
+            border-radius: 18px;
+            padding: 18px;
+            color: white;
+        }
+
+        .modal-badge {
+            display: block;
+            text-align: center;
+            background: var(--accent-yellow);
+            color: #000;
+            font-weight: 800;
+            font-size: 12px;
+            padding: 6px;
+            border-radius: 6px;
+            margin-bottom: 12px;
+        }
+
+        .modal-info {
+            background: #2D2C28;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 12px;
+            margin-bottom: 8px;
+        }
+
+        .modal-info strong {
+            color: #9A9893;
+            display: block;
+            font-size: 10px;
+            text-transform: uppercase;
+        }
+
+        .modal-fare {
+            font-size: 22px;
+            font-weight: 800;
+            color: #4ADE80;
+            text-align: center;
+            margin: 12px 0;
+            background: #000;
+            padding: 10px;
+            border-radius: 8px;
+        }
+
+        /* Form Inputs */
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .input-box {
+            background: var(--card-bg);
+            border: 1.5px solid var(--border-color);
+            border-radius: 14px;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .input-box span {
+            font-weight: 700;
+            font-size: 16px;
+            color: var(--text-sub);
+        }
+
+        .input-box input {
+            border: none;
+            outline: none;
+            background: transparent;
+            width: 100%;
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--text-main);
+        }
+
+        .quick-chips {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            padding-bottom: 4px;
+            margin-top: 8px;
+        }
+
+        .chip {
+            background: #EFECE6;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--text-sub);
+            white-space: nowrap;
+            cursor: pointer;
+        }
+
+        .text-input {
+            width: 100%;
+            background: var(--card-bg);
+            border: 1.5px solid var(--border-color);
+            border-radius: 14px;
+            padding: 14px;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 14px;
+            background: var(--primary-red);
+            color: white;
+            font-weight: 800;
+            font-size: 15px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 20px;
+        }
+
+        .btn-submit.income-btn {
+            background: var(--primary-green);
+        }
+
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 480px;
+            background: var(--card-bg);
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 11px;
+            color: var(--text-sub);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .nav-item.active {
+            color: var(--primary-green);
         }
     </style>
 </head>
 <body>
 
-    <div class="header">
-        <div class="header-title">
-            <h1>iqbike</h1>
-            <p>Menu Orderan</p>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-title">
+                <h1>iqbike</h1>
+                <p>Menu Orderan Driver</p>
+            </div>
         </div>
+
+        <!-- Ringkasan Keuangan -->
+        <div class="summary-grid">
+            <div class="summary-card">
+                <label>PENDAPATAN</label>
+                <div class="amount" id="total-income">Rp 0</div>
+            </div>
+            <div class="summary-card expense">
+                <label>PENGELUARAN</label>
+                <div class="amount" id="total-expense">Rp 0</div>
+            </div>
+        </div>
+
+        <!-- Tombol Tipe -->
+        <div class="type-switcher">
+            <button class="type-btn active income" onclick="switchType('income')">Pemasukan</button>
+            <button class="type-btn expense" onclick="switchType('expense')">Pengeluaran</button>
+        </div>
+
+        <!-- Kategori -->
+        <div class="section-label">PILIH KATEGORI</div>
+        <div class="category-grid" id="category-container">
+            <!-- Disikan oleh JavaScript / Default -->
+            <div class="cat-card selected income-selected">
+                <span>Ojeg WA</span>
+            </div>
+            <div class="cat-card">
+                <span>Maxim</span>
+            </div>
+            <div class="cat-card">
+                <span>Gojek</span>
+            </div>
+        </div>
+
+        <!-- Form Input Nominal -->
+        <div class="form-group">
+            <div class="section-label">NOMINAL</div>
+            <div class="input-box">
+                <span>Rp</span>
+                <input type="number" id="amount-input" placeholder="0">
+            </div>
+            <div class="quick-chips">
+                <button class="chip" onclick="addAmount(5000)">+5rb</button>
+                <button class="chip" onclick="addAmount(10000)">+10rb</button>
+                <button class="chip" onclick="addAmount(20000)">+20rb</button>
+                <button class="chip" onclick="addAmount(50000)">+50rb</button>
+            </div>
+        </div>
+
+        <!-- Form Input Catatan -->
+        <div class="form-group">
+            <div class="section-label">CATATAN (OPSIONAL)</div>
+            <input type="text" class="text-input" id="note-input" placeholder="Masukkan catatan transaksi...">
+        </div>
+
+        <!-- Tombol Buka Navigasi Rute (Langsung tanpa crash WA) -->
+        <a href="navigasi.html" style="text-decoration: none;">
+            <button class="btn-submit income-btn" type="button">
+                Buka Navigasi Rute
+            </button>
+        </a>
     </div>
 
-    <div class="card">
-        <h3>Detail Orderan</h3>
-        <p>Klik tombol di bawah ini untuk melihat peta / rute navigasi tanpa perlu konfirmasi WhatsApp.</p>
+    <!-- Bottom Navigation -->
+    <div class="bottom-nav">
+        <a href="index.html" class="nav-item active">
+            <span>Beranda</span>
+        </a>
+        <a href="navigasi.html" class="nav-item">
+            <span>Navigasi</span>
+        </a>
     </div>
 
-    <!-- Tombol Navigasi Langsung -->
-    <a href="navigasi.html" class="btn-navigasi">Buka Navigasi Rute</a>
+    <script>
+        function switchType(type) {
+            const btns = document.querySelectorAll('.type-btn');
+            btns.forEach(b => b.classList.remove('active'));
+            if(type === 'income') {
+                btns[0].classList.add('active');
+            } else {
+                btns[1].classList.add('active');
+            }
+        }
 
+        function addAmount(val) {
+            const input = document.getElementById('amount-input');
+            let current = parseInt(input.value) || 0;
+            input.value = current + val;
+        }
+    </script>
 </body>
 </html>
