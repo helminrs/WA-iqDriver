@@ -10,7 +10,7 @@
 
     /* Header & Summary Cards */
     .app-header { display: flex; align-items: center; padding: 15px; gap: 12px; }
-    .avatar { width: 45dp; height: 45px; background: #1a1a1a; color: #ffca28; font-weight: bold; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+    .avatar { width: 45px; height: 45px; background: #1a1a1a; color: #ffca28; font-weight: bold; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; }
     .user-info h2 { font-size: 16px; color: #1a1a1a; }
     .user-info p { font-size: 12px; color: #666; }
 
@@ -37,18 +37,18 @@
     .order-box { margin: 0 15px 15px; background: #e3f2fd; border: 1.5px dashed #0288d1; border-radius: 12px; padding: 12px; }
     .order-box label { font-size: 11px; font-weight: bold; color: #0288d1; display: block; margin-bottom: 6px; }
     .order-box textarea { width: 100%; height: 70px; border: 1px solid #b3e5fc; border-radius: 8px; padding: 8px; font-size: 12px; resize: none; outline: none; }
-    .btn-navigasi { width: 100%; margin-top: 8px; background: #0288d1; color: white; border: none; padding: 10px; border-radius: 8px; font-weight: bold; font-size: 13px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 5px; }
+    .btn-navigasi { width: 100%; margin-top: 8px; background: #0288d1; color: white; border: none; padding: 12px; border-radius: 8px; font-weight: bold; font-size: 14px; cursor: pointer; }
 
     /* Form Input */
     .form-group { padding: 0 15px 15px; }
     .input-card { background: white; border-radius: 12px; padding: 10px 15px; border: 1px solid #eee; margin-bottom: 10px; }
     .input-card label { font-size: 10px; color: #888; font-weight: bold; display: block; }
-    .input-card input, .input-card select { width: 100%; border: none; outline: none; font-size: 16px; font-weight: bold; margin-top: 2px; background: transparent; }
+    .input-card input { width: 100%; border: none; outline: none; font-size: 16px; font-weight: bold; margin-top: 2px; background: transparent; }
 
     .btn-quick { display: flex; gap: 8px; margin-bottom: 15px; overflow-x: auto; }
     .btn-quick button { background: #eee; border: none; padding: 6px 12px; border-radius: 15px; font-size: 12px; cursor: pointer; white-space: nowrap; }
 
-    .btn-submit { width: 100%; padding: 14px; border-radius: 10px; border: none; color: white; font-weight: bold; font-size: 15px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; }
+    .btn-submit { width: 100%; padding: 14px; border-radius: 10px; border: none; color: white; font-weight: bold; font-size: 15px; cursor: pointer; }
     .btn-submit.pemasukan { background: #2e7d32; }
     .btn-submit.pengeluaran { background: #c62828; }
 
@@ -68,9 +68,8 @@
 </head>
 <body>
 
-  <!-- ==================== PAGE: MAIN APP ==================== -->
+  <!-- ==================== MAIN APP ==================== -->
   <div id="main-app">
-    <!-- Header -->
     <div class="app-header">
       <div class="avatar">iq</div>
       <div class="user-info">
@@ -79,7 +78,6 @@
       </div>
     </div>
 
-    <!-- Summary -->
     <div class="summary-container">
       <div class="summary-card masuk">
         <span>MASUK HARI INI</span>
@@ -91,11 +89,11 @@
       </div>
     </div>
 
-    <!-- SCREEN 1: CATAT (HOMESCREEN) -->
+    <!-- SCREEN: CATAT -->
     <div id="screen-catat" class="screen-view active">
       <div class="type-switcher">
-        <button class="type-btn active pemasukan" onclick="switchType('pemasukan')">Pemasukan</button>
-        <button class="type-btn" onclick="switchType('pengeluaran')">Pengeluaran</button>
+        <button type="button" class="type-btn active pemasukan" onclick="switchType('pemasukan')">Pemasukan</button>
+        <button type="button" class="type-btn" onclick="switchType('pengeluaran')">Pengeluaran</button>
       </div>
 
       <div class="section-label" id="label-sumber">SUMBER PEMASUKAN</div>
@@ -108,17 +106,14 @@
         <div class="grid-item" onclick="selectCategory(this)">💰<br>Lainnya</div>
       </div>
 
-      <!-- Paste Pesan WA Orderan -->
       <div class="order-box">
         <label>📋 PASTE PESAN WHATSAPP ORDERAN:</label>
         <textarea id="wa-text" placeholder="Tempel seluruh pesan WA dari penumpang di sini..."></textarea>
-        <!-- PINTASAN LANGSUNG KEPETA TANPA KONFIRMASI WA ATAU REFRESH HALAMAN -->
         <button type="button" class="btn-navigasi" onclick="bukaNavigasi(event)">
           ⚡ Proses Orderan & Buka Navigasi
         </button>
       </div>
 
-      <!-- Form Inputs -->
       <div class="form-group">
         <div class="input-card">
           <label>NOMINAL</label>
@@ -138,7 +133,7 @@
 
         <div class="input-card">
           <label>CATATAN (OPSIONAL)</label>
-          <input type="text" placeholder="mis. Order jauh ke bandara">
+          <input type="text" id="input-catatan" placeholder="mis. Order jauh ke bandara">
         </div>
 
         <button type="button" class="btn-submit pemasukan" id="btn-submit-main" onclick="simpanData(event)">
@@ -147,39 +142,15 @@
       </div>
     </div>
 
-    <!-- SCREEN 2: RIWAYAT -->
-    <div id="screen-riwayat" class="screen-view">
-      <div style="padding: 15px;">
-        <h3>Riwayat Transaksi</h3>
-        <p style="margin-top: 10px; color: #666; font-size: 13px;">Daftar transaksi terbaru Anda akan muncul di sini.</p>
-      </div>
+    <!-- OTHER SCREENS -->
+    <div id="screen-riwayat" class="screen-view" style="padding: 15px;"><h3>Riwayat Transaksi</h3></div>
+    <div id="screen-analisa" class="screen-view" style="padding: 15px;"><h3>Analisa Keuangan</h3></div>
+    <div id="screen-bep" class="screen-view" style="padding: 15px;"><h3>Kalkulator BEP</h3></div>
+    <div id="screen-profil" class="screen-view" style="padding: 15px;">
+      <h3>Identitas Driver</h3>
+      <p style="margin-top:10px;"><strong>HELMI NURLIANSYAH</strong><br>Honda Vario 125 KZR (D 2074 JJ)</p>
     </div>
 
-    <!-- SCREEN 3: ANALISA -->
-    <div id="screen-analisa" class="screen-view">
-      <div style="padding: 15px;">
-        <h3>Analisa Keuangan</h3>
-        <p style="margin-top: 10px; color: #666; font-size: 13px;">Grafik dan statistik pendapatan Anda.</p>
-      </div>
-    </div>
-
-    <!-- SCREEN 4: BEP -->
-    <div id="screen-bep" class="screen-view">
-      <div style="padding: 15px;">
-        <h3>Kalkulator BEP</h3>
-        <p style="margin-top: 10px; color: #666; font-size: 13px;">Hitung target harian dan BEP operasional.</p>
-      </div>
-    </div>
-
-    <!-- SCREEN 5: PROFIL -->
-    <div id="screen-profil" class="screen-view">
-      <div style="padding: 15px;">
-        <h3>Identitas Driver & Kendaraan</h3>
-        <p style="margin-top: 10px; color: #666; font-size: 13px;"><strong>Nama Driver:</strong> HELMI NURLIANSYAH<br><strong>Kendaraan:</strong> Honda Vario 125 KZR<br><strong>Plat Nomor:</strong> D 2074 JJ</p>
-      </div>
-    </div>
-
-    <!-- Bottom Navigation -->
     <div class="bottom-nav">
       <div class="nav-item active" onclick="switchScreen('catat', this)"><span>➕</span>Catat</div>
       <div class="nav-item" onclick="switchScreen('riwayat', this)"><span>📋</span>Riwayat</div>
@@ -189,192 +160,82 @@
     </div>
   </div>
 
-  <!-- PAGE: NAVIGASI (PETA) -->
-<div id="screen-navigasi-peta" class="screen-view">
-  <div class="nav-header-bar">
-    <button type="button" class="btn-back-nav" onclick="tutupNavigasi(event)">← Kembali</button>
-    <h3 style="font-size: 16px; color: white;">Navigasi Rute Orderan</h3>
-  </div>
-
-  <div style="padding: 10px;">
-    <!-- Tombol Khusus Buka GPS Google Maps Asli HP -->
-    <button type="button" id="btn-open-google-maps" style="width: 100%; padding: 12px; background: #4285F4; color: white; border: none; border-radius: 8px; font-weight: bold; margin-bottom: 10px; cursor: pointer;">
-      🗺️ Buka Navigasi Suara di Google Maps HP
-    </button>
-
-    <!-- Map Iframe Embed -->
-    <div style="width: 100%; height: 380px; border-radius: 12px; overflow: hidden; border: 1px solid #ccc;">
-      <iframe id="map-iframe" width="100%" height="100%" frameborder="0" style="border:0;" src="about:blank" allowfullscreen></iframe>
+  <!-- ==================== PAGE: NAVIGASI ==================== -->
+  <div id="screen-navigasi-peta" class="screen-view">
+    <div class="nav-header-bar">
+      <button type="button" class="btn-back-nav" onclick="tutupNavigasi(event)">← Kembali</button>
+      <h3 style="font-size: 16px;">Navigasi Rute Orderan</h3>
     </div>
 
-    <!-- Tombol Menyelesaikan Orderan -->
-    <button type="button" onclick="tutupNavigasi(event)" style="background: #2e7d32; color: white; border: none; margin-top: 15px; width: 100%; padding: 14px; border-radius: 8px; font-weight: bold; font-size: 15px; cursor: pointer;">
-      ✓ Selesai & Kembali ke Menu Orderan
-    </button>
-  </div>
-</div>
-    
-    <!-- Iframe Peta Google Maps Asli -->
-    <iframe 
-      id="map-frame"
-      width="100%" 
-      height="450" 
-      style="border:0; border-radius:12px; box-shadow: 0 2px 8px rgba(0,0,0,0.15);" 
-      loading="lazy" 
-      allowfullscreen
-      src="about:blank">
-    </iframe>
+    <div style="padding: 20px; text-align: center;">
+      <div style="background: white; border-radius: 12px; padding: 15px; border: 1px solid #ddd; margin-bottom: 15px; text-align: left;">
+        <h4 style="color: #0288d1; margin-bottom: 8px;">📍 Informasi Rute Orderan:</h4>
+        <p id="info-rute" style="font-size: 13px; color: #555; white-space: pre-line;">Menunggu pesan WA...</p>
+      </div>
 
-    <button type="button" class="btn-back-nav" onclick="tutupNavigasi(event)" style="background: #2e7d32; margin-top: 15px; width: 100%; padding: 12px; border-radius: 8px;">
-      Selesai & Kembali ke Menu Orderan
-    </button>
+      <!-- TOMBOL BUKA GOOGLE MAPS HP DIRECT -->
+      <button type="button" id="btn-go-maps" style="width: 100%; padding: 14px; background: #4285F4; color: white; border: none; border-radius: 10px; font-weight: bold; font-size: 15px; cursor: pointer; margin-bottom: 12px;">
+        🚀 Buka GPS di Google Maps HP
+      </button>
+
+      <!-- TOMBOL SELESAI -->
+      <button type="button" onclick="tutupNavigasi(event)" style="width: 100%; padding: 14px; background: #2e7d32; color: white; border: none; border-radius: 10px; font-weight: bold; font-size: 15px; cursor: pointer;">
+        ✓ Selesai & Kembali ke Beranda
+      </button>
+    </div>
   </div>
-</div>
-  <!-- Script Logic Fixes -->
+
+  <!-- ==================== JAVASCRIPT ==================== -->
   <script>
-  // Set default tanggal hari ini
-  document.getElementById('input-tanggal').valueAsDate = new Date();
+    document.getElementById('input-tanggal').valueAsDate = new Date();
 
-  // Variabel penampung data orderan aktif
-  let currentOrderData = {
-    asal: '',
-    tujuan: '',
-    nominal: 0,
-    rawText: ''
-  };
+    let targetMapUrl = "";
 
-  // 1. FUNGSI PROSES ORDERAN & BUKA NAVIGASI
-  function bukaNavigasi(event) {
-    if(event) event.preventDefault();
+    function bukaNavigasi(event) {
+      if(event) event.preventDefault();
 
-    const textWA = document.getElementById('wa-text').value.trim();
-    if(!textWA) {
-      alert('Silakan tempel pesan WA orderan terlebih dahulu!');
-      return;
-    }
+      const textWA = document.getElementById('wa-text').value.trim();
+      if(!textWA) {
+        alert('Silakan tempel pesan WA orderan terlebih dahulu!');
+        return;
+      }
 
-    currentOrderData.rawText = textWA;
+      // Deteksi URL / Link Google Maps dari Pesan WA
+      const urlRegex = /(https?:\/\/[^\s]+)/g;
+      const foundUrls = textWA.match(urlRegex);
 
-    // Cari Link Google Maps / Alamat dari Teks WA
-    const urlRegex = /(https?:\/\/[^\s]+)/g;
-    const foundUrls = textWA.match(urlRegex) || [];
-
-    // Cari Nominal / Ongkir (misal: 17000 atau Rp 17.000)
-    const nominalRegex = /(?:rp|ongkir|tarif)?\s*[\:\=]?\s*(\d{1,3}(?:\.\d{3})+|\d+)/gi;
-    const foundNominal = textWA.match(nominalRegex);
-
-    let destinationQuery = "";
-
-    if (foundUrls.length > 0) {
-      // Jika ada link Google Maps di pesan WA, gunakan link tersebut
-      destinationQuery = foundUrls[0];
-    } else {
-      // Jika berupa teks alamat biasa, bersihkan teksnya
-      destinationQuery = encodeURIComponent(textWA.substring(0, 100));
-    }
-
-    // Update Tampilan Frame Navigasi
-    const mapFrame = document.getElementById('map-iframe');
-    if(mapFrame) {
-      // Format Google Maps Embed resmi berdasarkan pencarian/link
-      mapFrame.src = `https://maps.google.com/maps?q=${destinationQuery}&output=embed`;
-    }
-
-    // Set Tombol Buka Aplikasi Google Maps HP (Navigasi GPS Akurat)
-    const btnAppMaps = document.getElementById('btn-open-google-maps');
-    if(btnAppMaps) {
-      if(foundUrls.length > 0) {
-        btnAppMaps.onclick = () => window.open(foundUrls[0], '_blank');
+      if (foundUrls && foundUrls.length > 0) {
+        targetMapUrl = foundUrls[0];
       } else {
-        btnAppMaps.onclick = () => window.open(`https://www.google.com/maps/search/?api=1&query=${destinationQuery}`, '_blank');
+        // Jika tidak ada link, ambil teks untuk pencarian alamat
+        targetMapUrl = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(textWA.substring(0, 80));
       }
+
+      // Tampilkan Teks Rute
+      document.getElementById('info-rute').innerText = textWA;
+
+      // Event Tombol Buka Maps
+      document.getElementById('btn-go-maps').onclick = function() {
+        window.open(targetMapUrl, '_blank');
+      };
+
+      // Pindah Halaman
+      document.getElementById('main-app').style.display = 'none';
+      document.getElementById('screen-navigasi-peta').classList.add('active');
     }
 
-    // Tampilkan Layar Navigasi
-    document.getElementById('main-app').style.display = 'none';
-    document.getElementById('screen-navigasi-peta').classList.add('active');
-  }
-
-  // 2. FUNGSI MENYELESAIKAN ORDERAN & KEMBALI
-  function tutupNavigasi(event) {
-    if(event) event.preventDefault();
-
-    // Isi Otomatis Catatan & Nominal jika ditemukan di teks WA
-    if(currentOrderData.rawText) {
-      const inputCatatan = document.querySelector('input[placeholder*="Order jauh"]');
-      if(inputCatatan) {
-        inputCatatan.value = "Orderan WA: " + currentOrderData.rawText.substring(0, 50) + "...";
-      }
-    }
-
-    // Sembunyikan layar navigasi, kembali ke menu utama
-    document.getElementById('screen-navigasi-peta').classList.remove('active');
-    document.getElementById('main-app').style.display = 'block';
-
-    // Fokuskan pengguna ke tombol Simpan Pemasukan
-    const btnSubmit = document.getElementById('btn-submit-main');
-    if(btnSubmit) {
-      btnSubmit.scrollIntoView({ behavior: 'smooth' });
-    }
-  }
-
-  // Fungsi Pembantu Lainnya
-  function switchType(type) {
-    const btns = document.querySelectorAll('.type-btn');
-    const label = document.getElementById('label-sumber');
-    const submitBtn = document.getElementById('btn-submit-main');
-    
-    btns.forEach(b => b.classList.remove('active', 'pemasukan', 'pengeluaran'));
-
-    if(type === 'pemasukan') {
-      btns[0].classList.add('active', 'pemasukan');
-      label.innerText = 'SUMBER PEMASUKAN';
-      submitBtn.className = 'btn-submit pemasukan';
-      submitBtn.innerHTML = '✓ Simpan Pemasukan';
-    } else {
-      btns[1].classList.add('active', 'pengeluaran');
-      label.innerText = 'KATEGORI PENGELUARAN';
-      submitBtn.className = 'btn-submit pengeluaran';
-      submitBtn.innerHTML = '✓ Simpan Pengeluaran';
-    }
-  }
-
-  function switchScreen(screenName, el) {
-    document.querySelectorAll('.screen-view').forEach(s => s.classList.remove('active'));
-    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-    
-    document.getElementById('screen-' + screenName).classList.add('active');
-    el.classList.add('active');
-  }
-
-  function selectCategory(el) {
-    document.querySelectorAll('.grid-item').forEach(i => i.classList.remove('selected'));
-    el.classList.add('selected');
-  }
-
-  function addNominal(val) {
-    let input = document.getElementById('input-nominal');
-    let current = parseInt(input.value.replace(/[^0-9]/g, '')) || 0;
-    let total = current + val;
-    input.value = 'Rp ' + total.toLocaleString('id-ID');
-  }
-
-  function simpanData(e) {
-    if(e) e.preventDefault();
-    alert('Orderan berhasil diselesaikan & dimasukkan ke Pemasukan!');
-  }
-</script>
-
-    // Fix 2: Tombol Kembali dari Navigasi ke Menu Orderan
     function tutupNavigasi(event) {
-      if(event) event.preventDefault(); // Menghentikan refresh otomatis browser
+      if(event) event.preventDefault();
 
-      // Sembunyikan layar navigasi, tampilkan aplikasi utama kembali
+      const textWA = document.getElementById('wa-text').value.trim();
+      if(textWA) {
+        document.getElementById('input-catatan').value = textWA.substring(0, 45) + "...";
+      }
+
       document.getElementById('screen-navigasi-peta').classList.remove('active');
       document.getElementById('main-app').style.display = 'block';
     }
 
-    // Switcher Tab Pemasukan / Pengeluaran
     function switchType(type) {
       const btns = document.querySelectorAll('.type-btn');
       const label = document.getElementById('label-sumber');
@@ -395,22 +256,12 @@
       }
     }
 
-    // Switcher Bottom Nav
     function switchScreen(screenName, el) {
       document.querySelectorAll('.screen-view').forEach(s => s.classList.remove('active'));
       document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
       
       document.getElementById('screen-' + screenName).classList.add('active');
       el.classList.add('active');
-
-      const subtitles = {
-        'catat': 'Catat Transaksi',
-        'riwayat': 'Riwayat Transaksi',
-        'analisa': 'Analisa Keuangan',
-        'bep': 'Kalkulator BEP',
-        'profil': 'Profil & Identitas'
-      };
-      document.getElementById('header-subtitle').innerText = subtitles[screenName] || '';
     }
 
     function selectCategory(el) {
@@ -427,7 +278,7 @@
 
     function simpanData(e) {
       if(e) e.preventDefault();
-      alert('Data berhasil disimpan!');
+      alert('Transaksi berhasil disimpan!');
     }
   </script>
 </body>
