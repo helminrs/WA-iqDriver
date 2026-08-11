@@ -64,6 +64,10 @@
     /* Header Navigasi Khusus */
     .nav-header-bar { background: #0288d1; color: white; padding: 12px 15px; display: flex; align-items: center; gap: 12px; }
     .btn-back-nav { background: rgba(255,255,255,0.2); border: none; color: white; padding: 6px 12px; border-radius: 6px; font-weight: bold; cursor: pointer; }
+    
+    .status-badge { display: inline-block; padding: 4px 10px; border-radius: 12px; font-size: 12px; font-weight: bold; margin-bottom: 8px; }
+    .badge-jemput { background: #fff3cd; color: #856404; }
+    .badge-antar { background: #d4edda; color: #155724; }
   </style>
 </head>
 <body>
@@ -169,16 +173,19 @@
 
     <div style="padding: 20px; text-align: center;">
       <div style="background: white; border-radius: 12px; padding: 15px; border: 1px solid #ddd; margin-bottom: 15px; text-align: left;">
-        <h4 style="color: #0288d1; margin-bottom: 8px;">📍 Informasi Rute Orderan:</h4>
-        <p id="info-rute" style="font-size: 13px; color: #555; white-space: pre-line;">Menunggu pesan WA...</p>
+        <span id="badge-status" class="status-badge badge-jemput">📍 TAHAP 1: PENJEMPUTAN</span>
+        <p id="info-rute" style="font-size: 13px; color: #555; white-space: pre-line; line-height: 1.4;"></p>
       </div>
 
-      <!-- TOMBOL BUKA GOOGLE MAPS HP DIRECT -->
-      <button type="button" id="btn-go-maps" style="width: 100%; padding: 14px; background: #4285F4; color: white; border: none; border-radius: 10px; font-weight: bold; font-size: 15px; cursor: pointer; margin-bottom: 12px;">
-        🚀 Buka GPS di Google Maps HP
+      <!-- TOMBOL DENGAN STATE BERUBAH OLEH JAVASCRIPT -->
+      <button type="button" id="btn-action-gps" style="width: 100%; padding: 14px; background: #0288d1; color: white; border: none; border-radius: 10px; font-weight: bold; font-size: 15px; cursor: pointer; margin-bottom: 10px;">
+        📍 Buka GPS titik JEMPUT
       </button>
 
-      <!-- TOMBOL SELESAI -->
+      <button type="button" id="btn-step-next" style="width: 100%; padding: 12px; background: #ff9800; color: white; border: none; border-radius: 10px; font-weight: bold; font-size: 14px; cursor: pointer; margin-bottom: 15px;">
+        🙋‍♂️ Saya Sudah Sampai / Penumpang Naik
+      </button>
+
       <button type="button" onclick="tutupNavigasi(event)" style="width: 100%; padding: 14px; background: #2e7d32; color: white; border: none; border-radius: 10px; font-weight: bold; font-size: 15px; cursor: pointer;">
         ✓ Selesai & Kembali ke Beranda
       </button>
@@ -189,7 +196,10 @@
   <script>
     document.getElementById('input-tanggal').valueAsDate = new Date();
 
-    let targetMapUrl = "";
+    let urlJemput = "";
+    let urlAntar = "";
+    let extractedNominal = 0;
+    let stepNavigasi = 1; // 1 = Jemput, 2 = Antar
 
     function bukaNavigasi(event) {
       if(event) event.preventDefault();
@@ -200,28 +210,65 @@
         return;
       }
 
-      // Deteksi URL / Link Google Maps dari Pesan WA
+      // Deteksi URL Jemput & Tujuan
       const urlRegex = /(https?:\/\/[^\s]+)/g;
-      const foundUrls = textWA.match(urlRegex);
+      const foundUrls = textWA.match(urlRegex) || [];
 
-      if (foundUrls && foundUrls.length > 0) {
-        targetMapUrl = foundUrls[0];
-      } else {
-        // Jika tidak ada link, ambil teks untuk pencarian alamat
-        targetMapUrl = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(textWA.substring(0, 80));
+      urlJemput = foundUrls[0] || "";
+      urlAntar = foundUrls[1] || foundUrls[0] || "";
+
+      // Deteksi Nominal Tarif (Misal: Rp17.000 / Rp 17.000)
+      const tariffMatch = textWA.match(/Rp\s*([\d\.]+)/i);
+      if(tariffMatch) {
+        extractedNominal = parseInt(tariffMatch[1].replace(/\./g, '')) || 0;
       }
 
-      // Tampilkan Teks Rute
       document.getElementById('info-rute').innerText = textWA;
 
-      // Event Tombol Buka Maps
-      document.getElementById('btn-go-maps').onclick = function() {
-        window.open(targetMapUrl, '_blank');
-      };
+      // Reset State ke Tahap 1 (Jemput)
+      stepNavigasi = 1;
+      updateUIStateNavigasi();
 
       // Pindah Halaman
       document.getElementById('main-app').style.display = 'none';
       document.getElementById('screen-navigasi-peta').classList.add('active');
+    }
+
+    function updateUIStateNavigasi() {
+      const btnGps = document.getElementById('btn-action-gps');
+      const btnNext = document.getElementById('btn-step-next');
+      const badge = document.getElementById('badge-status');
+
+      if(stepNavigasi === 1) {
+        badge.className = "status-badge badge-jemput";
+        badge.innerText = "📍 TAHAP 1: PENJEMPUTAN";
+        
+        btnGps.style.background = "#0288d1";
+        btnGps.innerText = "📍 Buka GPS titik JEMPUT";
+        btnGps.onclick = function() {
+          if(urlJemput) window.open(urlJemput, '_blank');
+          else alert('Link lokasi jemput tidak ditemukan');
+        };
+
+        btnNext.style.display = "block";
+        btnNext.innerText = "🙋‍♂️ Saya Sudah Sampai / Penumpang Naik";
+        btnNext.onclick = function() {
+          stepNavigasi = 2;
+          updateUIStateNavigasi();
+        };
+      } else {
+        badge.className = "status-badge badge-antar";
+        badge.innerText = "🏁 TAHAP 2: PENGANTARAN";
+
+        btnGps.style.background = "#2e7d32";
+        btnGps.innerText = "🏁 Buka GPS titik ANTAR (TUJUAN)";
+        btnGps.onclick = function() {
+          if(urlAntar) window.open(urlAntar, '_blank');
+          else alert('Link lokasi antar tidak ditemukan');
+        };
+
+        btnNext.style.display = "none"; // Sembunyikan tombol transit
+      }
     }
 
     function tutupNavigasi(event) {
@@ -230,6 +277,10 @@
       const textWA = document.getElementById('wa-text').value.trim();
       if(textWA) {
         document.getElementById('input-catatan').value = textWA.substring(0, 45) + "...";
+      }
+
+      if(extractedNominal > 0) {
+        document.getElementById('input-nominal').value = "Rp " + extractedNominal.toLocaleString('id-ID');
       }
 
       document.getElementById('screen-navigasi-peta').classList.remove('active');
