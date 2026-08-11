@@ -1,488 +1,289 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>iqbike - Driver</title>
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WA-iqDriver - HELMI</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body { background-color: #f7f7f5; color: #333; padding-bottom: 70px; }
 
-        :root {
-            --primary-green: #008800;
-            --primary-red: #D32F2F;
-            --dark-card: #1C1C1E;
-            --card-bg: #FFFFFF;
-            --border-color: #E0E0E0;
-            --text-main: #212121;
-            --text-sub: #757575;
-            --accent-yellow: #FFC107;
-        }
+    /* Header & Summary Cards */
+    .app-header { display: flex; align-items: center; padding: 15px; gap: 12px; }
+    .avatar { width: 45dp; height: 45px; background: #1a1a1a; color: #ffca28; font-weight: bold; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+    .user-info h2 { font-size: 16px; color: #1a1a1a; }
+    .user-info p { font-size: 12px; color: #666; }
 
-        body {
-            background-color: #F4F6F9;
-            color: var(--text-main);
-            padding: 16px;
-            padding-bottom: 80px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
+    .summary-container { display: flex; gap: 10px; padding: 0 15px 15px; }
+    .summary-card { flex: 1; background: #1c1c1c; color: white; padding: 12px; border-radius: 12px; }
+    .summary-card span { font-size: 10px; text-transform: uppercase; color: #aaa; font-weight: bold; }
+    .summary-card h3 { font-size: 18px; margin-top: 4px; }
+    .summary-card.masuk h3 { color: #ffca28; }
+    .summary-card.keluar h3 { color: #ef5350; }
 
-        .container {
-            width: 100%;
-            max-width: 480px;
-        }
+    /* Tab Switcher */
+    .type-switcher { display: flex; background: #e0e0dc; margin: 0 15px 15px; border-radius: 10px; padding: 3px; }
+    .type-btn { flex: 1; padding: 10px; border: none; background: transparent; font-weight: bold; border-radius: 8px; cursor: pointer; color: #666; }
+    .type-btn.active.pemasukan { background: #2e7d32; color: white; }
+    .type-btn.active.pengeluaran { background: #c62828; color: white; }
 
-        .header {
-            background-color: var(--primary-green);
-            color: white;
-            padding: 16px;
-            border-radius: 14px;
-            text-align: center;
-            margin-bottom: 16px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-        }
+    /* Grid Options */
+    .section-label { font-size: 11px; font-weight: bold; color: #777; margin: 15px 15px 8px; text-transform: uppercase; }
+    .grid-container { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; padding: 0 15px 15px; }
+    .grid-item { background: white; border: 1px solid #eee; border-radius: 12px; padding: 12px 5px; text-align: center; cursor: pointer; font-size: 12px; font-weight: 500; }
+    .grid-item.selected { border: 2px solid #2e7d32; background-color: #f0fdf4; }
 
-        .header-title h1 {
-            font-size: 18px;
-            font-weight: 800;
-            line-height: 1.1;
-        }
+    /* Box Orderan */
+    .order-box { margin: 0 15px 15px; background: #e3f2fd; border: 1.5px dashed #0288d1; border-radius: 12px; padding: 12px; }
+    .order-box label { font-size: 11px; font-weight: bold; color: #0288d1; display: block; margin-bottom: 6px; }
+    .order-box textarea { width: 100%; height: 70px; border: 1px solid #b3e5fc; border-radius: 8px; padding: 8px; font-size: 12px; resize: none; outline: none; }
+    .btn-navigasi { width: 100%; margin-top: 8px; background: #0288d1; color: white; border: none; padding: 10px; border-radius: 8px; font-weight: bold; font-size: 13px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 5px; }
 
-        .header-title p {
-            font-size: 12px;
-            color: rgba(255, 255, 255, 0.9);
-            margin-top: 4px;
-        }
+    /* Form Input */
+    .form-group { padding: 0 15px 15px; }
+    .input-card { background: white; border-radius: 12px; padding: 10px 15px; border: 1px solid #eee; margin-bottom: 10px; }
+    .input-card label { font-size: 10px; color: #888; font-weight: bold; display: block; }
+    .input-card input, .input-card select { width: 100%; border: none; outline: none; font-size: 16px; font-weight: bold; margin-top: 2px; background: transparent; }
 
-        /* Summary Cards */
-        .summary-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            margin-bottom: 16px;
-        }
+    .btn-quick { display: flex; gap: 8px; margin-bottom: 15px; overflow-x: auto; }
+    .btn-quick button { background: #eee; border: none; padding: 6px 12px; border-radius: 15px; font-size: 12px; cursor: pointer; white-space: nowrap; }
 
-        .summary-card {
-            background: var(--dark-card);
-            border-radius: 16px;
-            padding: 14px;
-            color: #FFF;
-        }
+    .btn-submit { width: 100%; padding: 14px; border-radius: 10px; border: none; color: white; font-weight: bold; font-size: 15px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; }
+    .btn-submit.pemasukan { background: #2e7d32; }
+    .btn-submit.pengeluaran { background: #c62828; }
 
-        .summary-card label {
-            font-size: 10px;
-            font-weight: 700;
-            letter-spacing: 0.5px;
-            color: #9A9893;
-            display: block;
-            margin-bottom: 6px;
-        }
+    /* Navigation Bar (Bottom) */
+    .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: white; border-top: 1px solid #eee; display: flex; height: 60px; }
+    .nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #888; text-decoration: none; font-size: 10px; cursor: pointer; }
+    .nav-item.active { color: #2e7d32; font-weight: bold; }
 
-        .summary-card .amount {
-            font-size: 18px;
-            font-weight: 800;
-            color: var(--accent-yellow);
-        }
+    /* Screen Views */
+    .screen-view { display: none; }
+    .screen-view.active { display: block; }
 
-        .summary-card.expense .amount {
-            color: #FF6B6B;
-        }
-
-        /* Type Switcher */
-        .type-switcher {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            background: #EFECE6;
-            padding: 4px;
-            border-radius: 14px;
-            margin-bottom: 20px;
-        }
-
-        .type-btn {
-            border: none;
-            background: transparent;
-            padding: 12px;
-            border-radius: 10px;
-            font-weight: 700;
-            font-size: 14px;
-            color: var(--text-sub);
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .type-btn.active.income {
-            background: var(--primary-green);
-            color: white;
-        }
-
-        .type-btn.active.expense {
-            background: var(--primary-red);
-            color: white;
-        }
-
-        /* Category Grid */
-        .section-label {
-            font-size: 11px;
-            font-weight: 700;
-            color: var(--text-sub);
-            letter-spacing: 0.5px;
-            margin-bottom: 10px;
-            text-transform: uppercase;
-        }
-
-        .category-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-
-        .cat-card {
-            background: var(--card-bg);
-            border: 1.5px solid var(--border-color);
-            border-radius: 14px;
-            padding: 12px 6px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-            cursor: pointer;
-            transition: all 0.15s ease;
-        }
-
-        .cat-card span {
-            font-size: 11px;
-            font-weight: 600;
-            color: var(--text-main);
-            text-align: center;
-        }
-
-        .cat-card.selected.income-selected {
-            border-color: var(--primary-green);
-            background: #F0FDF4;
-        }
-
-        /* KOTAK PASTE KHUSUS OJEG WA */
-        #wa-driver-box {
-            background: #E0F2FE;
-            border: 1.5px dashed #0284C7;
-            border-radius: 14px;
-            padding: 12px;
-            margin-bottom: 16px;
-            display: none;
-        }
-
-        #wa-driver-box label {
-            font-size: 11px;
-            font-weight: 800;
-            color: #0369A1;
-            display: block;
-            margin-bottom: 6px;
-        }
-
-        #wa-driver-box textarea {
-            width: 100%;
-            height: 90px;
-            padding: 10px;
-            border: 1px solid #BAE6FD;
-            border-radius: 8px;
-            font-size: 12px;
-            resize: none;
-            outline: none;
-            margin-bottom: 8px;
-        }
-
-        .btn-wa-process {
-            width: 100%;
-            background: #0284C7;
-            color: white;
-            border: none;
-            padding: 10px;
-            font-size: 13px;
-            font-weight: 700;
-            border-radius: 8px;
-            cursor: pointer;
-        }
-
-        /* POPUP NAVIGASI DRIVER */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.6);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 999;
-            padding: 16px;
-        }
-
-        .modal-card {
-            background: var(--dark-card);
-            width: 100%;
-            max-width: 420px;
-            border-radius: 18px;
-            padding: 18px;
-            color: white;
-        }
-
-        .modal-badge {
-            display: block;
-            text-align: center;
-            background: var(--accent-yellow);
-            color: #000;
-            font-weight: 800;
-            font-size: 12px;
-            padding: 6px;
-            border-radius: 6px;
-            margin-bottom: 12px;
-        }
-
-        .modal-info {
-            background: #2D2C28;
-            padding: 10px;
-            border-radius: 8px;
-            font-size: 12px;
-            margin-bottom: 8px;
-        }
-
-        .modal-info strong {
-            color: #9A9893;
-            display: block;
-            font-size: 10px;
-            text-transform: uppercase;
-        }
-
-        .modal-fare {
-            font-size: 22px;
-            font-weight: 800;
-            color: #4ADE80;
-            text-align: center;
-            margin: 12px 0;
-            background: #000;
-            padding: 10px;
-            border-radius: 8px;
-        }
-
-        /* Form Inputs */
-        .form-group {
-            margin-bottom: 16px;
-        }
-
-        .input-box {
-            background: var(--card-bg);
-            border: 1.5px solid var(--border-color);
-            border-radius: 14px;
-            padding: 12px 16px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .input-box span {
-            font-weight: 700;
-            font-size: 16px;
-            color: var(--text-sub);
-        }
-
-        .input-box input {
-            border: none;
-            outline: none;
-            background: transparent;
-            width: 100%;
-            font-size: 20px;
-            font-weight: 800;
-            color: var(--text-main);
-        }
-
-        .quick-chips {
-            display: flex;
-            gap: 8px;
-            overflow-x: auto;
-            padding-bottom: 4px;
-            margin-top: 8px;
-        }
-
-        .chip {
-            background: #EFECE6;
-            border: none;
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 700;
-            color: var(--text-sub);
-            white-space: nowrap;
-            cursor: pointer;
-        }
-
-        .text-input {
-            width: 100%;
-            background: var(--card-bg);
-            border: 1.5px solid var(--border-color);
-            border-radius: 14px;
-            padding: 14px;
-            font-size: 14px;
-            outline: none;
-        }
-
-        .btn-submit {
-            width: 100%;
-            padding: 16px;
-            border: none;
-            border-radius: 14px;
-            background: var(--primary-red);
-            color: white;
-            font-weight: 800;
-            font-size: 15px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            margin-top: 20px;
-        }
-
-        .btn-submit.income-btn {
-            background: var(--primary-green);
-        }
-
-        .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 100%;
-            max-width: 480px;
-            background: var(--card-bg);
-            border-top: 1px solid var(--border-color);
-            display: flex;
-            justify-content: space-around;
-            padding: 10px 0;
-        }
-
-        .nav-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            font-size: 11px;
-            color: var(--text-sub);
-            text-decoration: none;
-            font-weight: 600;
-        }
-
-        .nav-item.active {
-            color: var(--primary-green);
-        }
-    </style>
+    /* Header Navigasi Khusus */
+    .nav-header-bar { background: #0288d1; color: white; padding: 12px 15px; display: flex; align-items: center; gap: 12px; }
+    .btn-back-nav { background: rgba(255,255,255,0.2); border: none; color: white; padding: 6px 12px; border-radius: 6px; font-weight: bold; cursor: pointer; }
+  </style>
 </head>
 <body>
 
-    <div class="container">
-        <!-- Header -->
-        <div class="header">
-            <div class="header-title">
-                <h1>iqbike</h1>
-                <p>Menu Orderan Driver</p>
-            </div>
+  <!-- ==================== PAGE: MAIN APP ==================== -->
+  <div id="main-app">
+    <!-- Header -->
+    <div class="app-header">
+      <div class="avatar">iq</div>
+      <div class="user-info">
+        <h2>HELMI</h2>
+        <p id="header-subtitle">Catat Transaksi</p>
+      </div>
+    </div>
+
+    <!-- Summary -->
+    <div class="summary-container">
+      <div class="summary-card masuk">
+        <span>MASUK HARI INI</span>
+        <h3 id="txt-masuk">Rp 17.000</h3>
+      </div>
+      <div class="summary-card keluar">
+        <span>KELUAR HARI INI</span>
+        <h3 id="txt-keluar">Rp 0</h3>
+      </div>
+    </div>
+
+    <!-- SCREEN 1: CATAT (HOMESCREEN) -->
+    <div id="screen-catat" class="screen-view active">
+      <div class="type-switcher">
+        <button class="type-btn active pemasukan" onclick="switchType('pemasukan')">Pemasukan</button>
+        <button class="type-btn" onclick="switchType('pengeluaran')">Pengeluaran</button>
+      </div>
+
+      <div class="section-label" id="label-sumber">SUMBER PEMASUKAN</div>
+      <div class="grid-container" id="grid-sumber">
+        <div class="grid-item" onclick="selectCategory(this)">🆔<br>InDrive</div>
+        <div class="grid-item" onclick="selectCategory(this)">🟢<br>Lain-Lain</div>
+        <div class="grid-item" onclick="selectCategory(this)">🛵<br>Offline</div>
+        <div class="grid-item" onclick="selectCategory(this)">🎁<br>Tips/Bonus</div>
+        <div class="grid-item selected" onclick="selectCategory(this)">💬<br>Ojeg WA</div>
+        <div class="grid-item" onclick="selectCategory(this)">💰<br>Lainnya</div>
+      </div>
+
+      <!-- Paste Pesan WA Orderan -->
+      <div class="order-box">
+        <label>📋 PASTE PESAN WHATSAPP ORDERAN:</label>
+        <textarea id="wa-text" placeholder="Tempel seluruh pesan WA dari penumpang di sini..."></textarea>
+        <!-- PINTASAN LANGSUNG KEPETA TANPA KONFIRMASI WA ATAU REFRESH HALAMAN -->
+        <button type="button" class="btn-navigasi" onclick="bukaNavigasi(event)">
+          ⚡ Proses Orderan & Buka Navigasi
+        </button>
+      </div>
+
+      <!-- Form Inputs -->
+      <div class="form-group">
+        <div class="input-card">
+          <label>NOMINAL</label>
+          <input type="text" id="input-nominal" value="Rp 0">
+        </div>
+        <div class="btn-quick">
+          <button type="button" onclick="addNominal(10000)">+10 rb</button>
+          <button type="button" onclick="addNominal(20000)">+20 rb</button>
+          <button type="button" onclick="addNominal(50000)">+50 rb</button>
+          <button type="button" onclick="addNominal(100000)">+100 rb</button>
         </div>
 
-        <!-- Ringkasan Keuangan -->
-        <div class="summary-grid">
-            <div class="summary-card">
-                <label>PENDAPATAN</label>
-                <div class="amount" id="total-income">Rp 0</div>
-            </div>
-            <div class="summary-card expense">
-                <label>PENGELUARAN</label>
-                <div class="amount" id="total-expense">Rp 0</div>
-            </div>
+        <div class="input-card">
+          <label>TANGGAL</label>
+          <input type="date" id="input-tanggal">
         </div>
 
-        <!-- Tombol Tipe -->
-        <div class="type-switcher">
-            <button class="type-btn active income" onclick="switchType('income')">Pemasukan</button>
-            <button class="type-btn expense" onclick="switchType('expense')">Pengeluaran</button>
+        <div class="input-card">
+          <label>CATATAN (OPSIONAL)</label>
+          <input type="text" placeholder="mis. Order jauh ke bandara">
         </div>
 
-        <!-- Kategori -->
-        <div class="section-label">PILIH KATEGORI</div>
-        <div class="category-grid" id="category-container">
-            <!-- Disikan oleh JavaScript / Default -->
-            <div class="cat-card selected income-selected">
-                <span>Ojeg WA</span>
-            </div>
-            <div class="cat-card">
-                <span>Maxim</span>
-            </div>
-            <div class="cat-card">
-                <span>Gojek</span>
-            </div>
-        </div>
+        <button type="button" class="btn-submit pemasukan" id="btn-submit-main" onclick="simpanData(event)">
+          ✓ Simpan Pemasukan
+        </button>
+      </div>
+    </div>
 
-        <!-- Form Input Nominal -->
-        <div class="form-group">
-            <div class="section-label">NOMINAL</div>
-            <div class="input-box">
-                <span>Rp</span>
-                <input type="number" id="amount-input" placeholder="0">
-            </div>
-            <div class="quick-chips">
-                <button class="chip" onclick="addAmount(5000)">+5rb</button>
-                <button class="chip" onclick="addAmount(10000)">+10rb</button>
-                <button class="chip" onclick="addAmount(20000)">+20rb</button>
-                <button class="chip" onclick="addAmount(50000)">+50rb</button>
-            </div>
-        </div>
+    <!-- SCREEN 2: RIWAYAT -->
+    <div id="screen-riwayat" class="screen-view">
+      <div style="padding: 15px;">
+        <h3>Riwayat Transaksi</h3>
+        <p style="margin-top: 10px; color: #666; font-size: 13px;">Daftar transaksi terbaru Anda akan muncul di sini.</p>
+      </div>
+    </div>
 
-        <!-- Form Input Catatan -->
-        <div class="form-group">
-            <div class="section-label">CATATAN (OPSIONAL)</div>
-            <input type="text" class="text-input" id="note-input" placeholder="Masukkan catatan transaksi...">
-        </div>
+    <!-- SCREEN 3: ANALISA -->
+    <div id="screen-analisa" class="screen-view">
+      <div style="padding: 15px;">
+        <h3>Analisa Keuangan</h3>
+        <p style="margin-top: 10px; color: #666; font-size: 13px;">Grafik dan statistik pendapatan Anda.</p>
+      </div>
+    </div>
 
-        <!-- Tombol Buka Navigasi Rute (Langsung tanpa crash WA) -->
-        <a href="navigasi.html" style="text-decoration: none;">
-            <button class="btn-submit income-btn" type="button">
-                Buka Navigasi Rute
-            </button>
-        </a>
+    <!-- SCREEN 4: BEP -->
+    <div id="screen-bep" class="screen-view">
+      <div style="padding: 15px;">
+        <h3>Kalkulator BEP</h3>
+        <p style="margin-top: 10px; color: #666; font-size: 13px;">Hitung target harian dan BEP operasional.</p>
+      </div>
+    </div>
+
+    <!-- SCREEN 5: PROFIL -->
+    <div id="screen-profil" class="screen-view">
+      <div style="padding: 15px;">
+        <h3>Identitas Driver & Kendaraan</h3>
+        <p style="margin-top: 10px; color: #666; font-size: 13px;"><strong>Nama Driver:</strong> HELMI NURLIANSYAH<br><strong>Kendaraan:</strong> Honda Vario 125 KZR<br><strong>Plat Nomor:</strong> D 2074 JJ</p>
+      </div>
     </div>
 
     <!-- Bottom Navigation -->
     <div class="bottom-nav">
-        <a href="index.html" class="nav-item active">
-            <span>Beranda</span>
-        </a>
-        <a href="navigasi.html" class="nav-item">
-            <span>Navigasi</span>
-        </a>
+      <div class="nav-item active" onclick="switchScreen('catat', this)"><span>➕</span>Catat</div>
+      <div class="nav-item" onclick="switchScreen('riwayat', this)"><span>📋</span>Riwayat</div>
+      <div class="nav-item" onclick="switchScreen('analisa', this)"><span>📊</span>Analisa</div>
+      <div class="nav-item" onclick="switchScreen('bep', this)"><span>🧮</span>BEP</div>
+      <div class="nav-item" onclick="switchScreen('profil', this)"><span>👤</span>Profil</div>
     </div>
+  </div>
 
-    <script>
-        function switchType(type) {
-            const btns = document.querySelectorAll('.type-btn');
-            btns.forEach(b => b.classList.remove('active'));
-            if(type === 'income') {
-                btns[0].classList.add('active');
-            } else {
-                btns[1].classList.add('active');
-            }
-        }
+  <!-- ==================== PAGE: NAVIGASI (PETA) ==================== -->
+  <div id="screen-navigasi-peta" class="screen-view">
+    <div class="nav-header-bar">
+      <!-- TOMBOL KEMBALI KE MENU UTAMA -->
+      <button type="button" class="btn-back-nav" onclick="tutupNavigasi(event)">← Kembali</button>
+      <h3 style="font-size: 16px;">Navigasi Rute Orderan</h3>
+    </div>
+    <div style="padding: 15px; text-align: center;">
+      <div style="width: 100%; height: 350px; background: #e0e0e0; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #666; font-weight: bold; border: 2px dashed #bbb;">
+        📍 Map / Navigasi GPS Aktif
+      </div>
+      <button type="button" class="btn-back-nav" onclick="tutupNavigasi(event)" style="background: #2e7d32; margin-top: 20px; width: 100%; padding: 12px;">
+        Selesai & Kembali ke Menu Orderan
+      </button>
+    </div>
+  </div>
 
-        function addAmount(val) {
-            const input = document.getElementById('amount-input');
-            let current = parseInt(input.value) || 0;
-            input.value = current + val;
-        }
-    </script>
+  <!-- Script Logic Fixes -->
+  <script>
+    // Set default tanggal hari ini
+    document.getElementById('input-tanggal').valueAsDate = new Date();
+
+    // Fix 1: Mencegah Refresh Tiba-tiba & Buka Navigasi Langsung tanpa WA Confirmation
+    function bukaNavigasi(event) {
+      if(event) event.preventDefault(); // Menghentikan refresh otomatis browser
+      
+      // Sembunyikan aplikasi utama, tampilkan layar navigasi
+      document.getElementById('main-app').style.display = 'none';
+      document.getElementById('screen-navigasi-peta').classList.add('active');
+    }
+
+    // Fix 2: Tombol Kembali dari Navigasi ke Menu Orderan
+    function tutupNavigasi(event) {
+      if(event) event.preventDefault(); // Menghentikan refresh otomatis browser
+
+      // Sembunyikan layar navigasi, tampilkan aplikasi utama kembali
+      document.getElementById('screen-navigasi-peta').classList.remove('active');
+      document.getElementById('main-app').style.display = 'block';
+    }
+
+    // Switcher Tab Pemasukan / Pengeluaran
+    function switchType(type) {
+      const btns = document.querySelectorAll('.type-btn');
+      const label = document.getElementById('label-sumber');
+      const submitBtn = document.getElementById('btn-submit-main');
+      
+      btns.forEach(b => b.classList.remove('active', 'pemasukan', 'pengeluaran'));
+
+      if(type === 'pemasukan') {
+        btns[0].classList.add('active', 'pemasukan');
+        label.innerText = 'SUMBER PEMASUKAN';
+        submitBtn.className = 'btn-submit pemasukan';
+        submitBtn.innerHTML = '✓ Simpan Pemasukan';
+      } else {
+        btns[1].classList.add('active', 'pengeluaran');
+        label.innerText = 'KATEGORI PENGELUARAN';
+        submitBtn.className = 'btn-submit pengeluaran';
+        submitBtn.innerHTML = '✓ Simpan Pengeluaran';
+      }
+    }
+
+    // Switcher Bottom Nav
+    function switchScreen(screenName, el) {
+      document.querySelectorAll('.screen-view').forEach(s => s.classList.remove('active'));
+      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+      
+      document.getElementById('screen-' + screenName).classList.add('active');
+      el.classList.add('active');
+
+      const subtitles = {
+        'catat': 'Catat Transaksi',
+        'riwayat': 'Riwayat Transaksi',
+        'analisa': 'Analisa Keuangan',
+        'bep': 'Kalkulator BEP',
+        'profil': 'Profil & Identitas'
+      };
+      document.getElementById('header-subtitle').innerText = subtitles[screenName] || '';
+    }
+
+    function selectCategory(el) {
+      document.querySelectorAll('.grid-item').forEach(i => i.classList.remove('selected'));
+      el.classList.add('selected');
+    }
+
+    function addNominal(val) {
+      let input = document.getElementById('input-nominal');
+      let current = parseInt(input.value.replace(/[^0-9]/g, '')) || 0;
+      let total = current + val;
+      input.value = 'Rp ' + total.toLocaleString('id-ID');
+    }
+
+    function simpanData(e) {
+      if(e) e.preventDefault();
+      alert('Data berhasil disimpan!');
+    }
+  </script>
 </body>
 </html>
